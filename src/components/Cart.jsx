@@ -1,7 +1,7 @@
 import { FoodCartContext } from '../store/food-cart-context';
 import { useContext } from 'react';
 
-export default function Cart() {
+export default function Cart({ onClose, onCheckout }) {
   const { items, updateItemQuantity } = useContext(FoodCartContext);
 
   const totalPrice = items.reduce(
@@ -41,6 +41,15 @@ export default function Cart() {
       <p className='cart-total'>
         Cart Total: <strong>{formattedTotalPrice}</strong>
       </p>
+      <div className='modal-actions'>
+        <button onClick={onClose}>Close</button>
+
+        {items.length > 0 && (
+          <button className='button' onClick={onCheckout}>
+            Go to Checkout
+          </button>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,66 @@
-export default function UserForm() {
+import { FoodCartContext } from '../store/food-cart-context';
+import { useContext } from 'react';
+import { postOrders } from '../http.js';
+
+export default function UserForm({ onClose }) {
+  const { items } = useContext(FoodCartContext);
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    console.log('Submitted data:', data);
+    console.log('items', items);
+
+    const order = {
+      customer: data,
+      items: items,
+    };
+
+    try {
+      await postOrders(order);
+      onClose();
+    } catch (error) {
+      log(error);
+    }
+  }
   return (
-    <form className='control'>
-      <h3>Checkout</h3>;
+    <form onSubmit={handleSubmit} className='control'>
+      <div className='control'>
+        <label>Name</label>
+        <input name='name' required />
+      </div>
+
+      <div className='control'>
+        <label>Email</label>
+        <input type='email' name='email' required />
+      </div>
+
+      <div className='control'>
+        <label>Street</label>
+        <input name='street' required />
+      </div>
+
+      <div className='control'>
+        <label>Postal Code</label>
+        <input name='postalCode' required />
+      </div>
+
+      <div className='control'>
+        <label>City</label>
+        <input name='city' required />
+      </div>
+
+      <div className='modal-actions'>
+        <button type='button' onClick={() => onClose()}>
+          Close
+        </button>
+
+        <button className='button' type='submit'>
+          Submit
+        </button>
+      </div>
     </form>
   );
 }

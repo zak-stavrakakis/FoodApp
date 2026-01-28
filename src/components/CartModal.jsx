@@ -20,25 +20,18 @@ const CartModal = forwardRef(function Modal({ title, cartQuantity }, ref) {
     setShowForm(false);
   }
 
+  function onCheckout() {
+    setShowForm(true);
+  }
+
   return createPortal(
     <dialog className='modal' ref={dialog}>
       <h2>{title}</h2>
-      {showForm ? <UserForm /> : <Cart />}
-      <div className='modal-actions'>
-        <button onClick={onClose}>Close</button>
-
-        {cartQuantity > 0 && !showForm && (
-          <button
-            className='button'
-            onClick={() => {
-              setShowForm(true);
-            }}
-          >
-            Go to Checkout
-          </button>
-        )}
-        {showForm && <button className='button'>Submit Form</button>}
-      </div>
+      {showForm ? (
+        <UserForm onClose={onClose}/>
+      ) : (
+        <Cart onClose={onClose} onCheckout={onCheckout} />
+      )}
     </dialog>,
     document.getElementById('modal'),
   );
