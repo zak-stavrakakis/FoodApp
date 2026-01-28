@@ -13,7 +13,7 @@ function foodCartReducer(state, action) {
     const updatedItems = [...state.items];
 
     const existingCartItemIndex = updatedItems.findIndex(
-      (cartItem) => cartItem.id === action.payload,
+      (cartItem) => cartItem.id === action.payload.id,
     );
     const existingCartItem = updatedItems[existingCartItemIndex];
 
@@ -24,13 +24,15 @@ function foodCartReducer(state, action) {
       };
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
-      const product = DUMMY_PRODUCTS.find(
-        (product) => product.id === action.payload,
-      );
+      // const product = DUMMY_PRODUCTS.find(
+      //   (product) => product.id === action.payload,
+      // );
+      console.log(action.payload);
+
       updatedItems.push({
-        id: action.payload,
-        name: product.title,
-        price: product.price,
+        id: action.payload.id,
+        name: action.payload.name,
+        price: action.payload.price,
         quantity: 1,
       });
     }
@@ -72,10 +74,10 @@ export default function FoodContextProvider({ children }) {
     items: [],
   });
 
-  function handleAddItemToCart(id) {
+  function handleAddItemToCart(meal) {
     foodCartDispatch({
       type: 'ADD_ITEM',
-      payload: id,
+      payload: meal,
     });
   }
 
@@ -96,6 +98,8 @@ export default function FoodContextProvider({ children }) {
   };
 
   return (
-    <FoodCartContext.Provider value={ctxValue}>{children}</FoodCartContext.Provider>
+    <FoodCartContext.Provider value={ctxValue}>
+      {children}
+    </FoodCartContext.Provider>
   );
 }
