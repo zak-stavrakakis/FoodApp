@@ -14,19 +14,19 @@ export default function Header() {
     modal.current.open();
   }
 
-  let modalActions = <button>Close</button>;
+  // let modalActions = <button>Close</button>;
 
-  if (cartQuantity > 0) {
-    modalActions = (
-      <>
-        <button>Close</button>
-        <button className='button'>Go to Checkout</button>
-      </>
-    );
-  }
+  // if (cartQuantity > 0) {
+  //   modalActions = (
+  //     <>
+  //       <button>Close</button>
+  //       <button className='button'>Go to Checkout</button>
+  //     </>
+  //   );
+  // }
   return (
     <>
-      <CartModal ref={modal} title='Your Cart' actions={modalActions} />
+      <CartModal ref={modal} title='Your Cart' cartQuantity={cartQuantity} />
       <header id='main-header'>
         <div id='title'>
           <img src={logoPng} alt='logo' />
