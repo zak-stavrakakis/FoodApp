@@ -22,7 +22,7 @@ function App() {
     }
 
     fetchMeals();
-  });
+  }, []);
   return (
     <FoodContextProvider>
       <Header />

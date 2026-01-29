@@ -44,7 +44,7 @@ export default function UserForm({ onClose }) {
 
       <div className='control'>
         <label>Postal Code</label>
-        <input name='postalCode' required />
+        <input name='postal-code' required />
       </div>
 
       <div className='control'>
