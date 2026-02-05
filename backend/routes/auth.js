@@ -52,4 +52,11 @@ router.post('/login', async (req, res) => {
   res.json({ token });
 });
 
+router.post('/logout', (req, res) => {
+  console.log('logout');
+
+  // JWT logout: frontend just deletes token
+  return res.json({ message: 'Logged out successfully' });
+});
+
 export default router;

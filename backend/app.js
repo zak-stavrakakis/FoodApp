@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises';
-
 import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
@@ -12,20 +11,20 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+// ✅ CORS configuration
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // your React app
+    credentials: true, // needed if using cookies
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'], // include JWT header if needed
+  }),
+);
 
-app.use(cors());
 app.use(express.json());
-
 app.use('/auth', authRoutes);
 
 app.get('/meals', async (req, res) => {
-  //const meals = await fs.readFile('./data/available-meals.json', 'utf8');
   const meals = await getMeals();
   res.json(meals);
 });
@@ -33,25 +32,17 @@ app.get('/meals', async (req, res) => {
 app.post('/orders', async (req, res) => {
   const orderData = req.body.order;
 
-  if (
-    orderData === null ||
-    orderData.items === null ||
-    orderData.items.length === 0
-  ) {
+  if (!orderData || !orderData.items || orderData.items.length === 0) {
     return res.status(400).json({ message: 'Missing data.' });
   }
 
+  const c = orderData.customer;
   if (
-    orderData.customer.email === null ||
-    !orderData.customer.email.includes('@') ||
-    orderData.customer.name === null ||
-    orderData.customer.name.trim() === '' ||
-    orderData.customer.street === null ||
-    orderData.customer.street.trim() === '' ||
-    orderData.customer['postal-code'] === null ||
-    orderData.customer['postal-code'].trim() === '' ||
-    orderData.customer.city === null ||
-    orderData.customer.city.trim() === ''
+    !c.email?.includes('@') ||
+    !c.name?.trim() ||
+    !c.street?.trim() ||
+    !c['postal-code']?.trim() ||
+    !c.city?.trim()
   ) {
     return res.status(400).json({
       message:
@@ -59,10 +50,7 @@ app.post('/orders', async (req, res) => {
     });
   }
 
-  const newOrder = {
-    ...orderData,
-    id: (Math.random() * 1000).toString(),
-  };
+  const newOrder = { ...orderData, id: (Math.random() * 1000).toString() };
   const orders = await fs.readFile('./data/orders.json', 'utf8');
   const allOrders = JSON.parse(orders);
   allOrders.push(newOrder);
@@ -70,12 +58,11 @@ app.post('/orders', async (req, res) => {
   res.status(201).json({ message: 'Order created!' });
 });
 
-app.use((req, res) => {
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
+// Handle OPTIONS preflight requests
+app.options('*', cors());
 
+app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-app.listen(3000);
+app.listen(3000, () => console.log('Server running on port 3000'));
