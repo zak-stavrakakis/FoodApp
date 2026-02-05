@@ -1,7 +1,5 @@
 import { createContext, useReducer } from 'react';
 
-//import { DUMMY_PRODUCTS } from '../dummy-products.js';
-
 export const FoodCartContext = createContext({
   items: [],
   addItemToCart: () => {},
@@ -24,9 +22,6 @@ function foodCartReducer(state, action) {
       };
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
-      // const product = DUMMY_PRODUCTS.find(
-      //   (product) => product.id === action.payload,
-      // );
       console.log(action.payload);
 
       updatedItems.push({
