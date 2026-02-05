@@ -1,14 +1,16 @@
 import logoPng from '../assets/logo.jpg';
 import { FoodCartContext } from '../store/food-cart-context';
 import { useRef, useContext } from 'react';
+import { useSelector } from 'react-redux';
 
 import CartModal from './CartModal.jsx';
 
 export default function Header() {
   const modal = useRef();
-  const { items } = useContext(FoodCartContext);
+  // const { items } = useContext(FoodCartContext);
 
-  const cartQuantity = items.length;
+  // const cartQuantity = items.length;
+  const cartQuantity = useSelector((state) => state.cart.totalQuantity);
 
   function handleOpenCartClick() {
     modal.current.open();

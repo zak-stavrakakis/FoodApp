@@ -29,7 +29,7 @@ function App() {
   return !token ? (
     <Login onLogin={() => window.location.reload()} />
   ) : (
-    <FoodContextProvider>
+    <>
       <Header />
       {/* <h1>You got this 💪</h1>
       <p>Stuck? Not sure how to proceed?</p>
@@ -41,7 +41,7 @@ function App() {
           </li>
         ))}
       </Meals>
-    </FoodContextProvider>
+    </>
   );
 }
 
