@@ -3,12 +3,14 @@ import Header from './components/Header';
 import FoodContextProvider from './store/food-cart-context.jsx';
 import Meals from './components/Meals.jsx';
 import Meal from './components/Meal.jsx';
+import Login from './components/Login.jsx';
 import { fetchAllMeals } from './http.js';
 
 function App() {
   const [meals, setMeals] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState();
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     async function fetchMeals() {
@@ -23,7 +25,10 @@ function App() {
 
     fetchMeals();
   }, []);
-  return (
+
+  return !token ? (
+    <Login onLogin={() => window.location.reload()} />
+  ) : (
     <FoodContextProvider>
       <Header />
       {/* <h1>You got this 💪</h1>

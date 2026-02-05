@@ -2,7 +2,10 @@ import fs from 'node:fs/promises';
 
 import bodyParser from 'body-parser';
 import express from 'express';
+import cors from 'cors';
 import { getMeals } from './data/test-db.js';
+import authRoutes from './routes/auth.js';
+import bcrypt from 'bcrypt';
 
 const app = express();
 
@@ -15,6 +18,11 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
+
+app.use(cors());
+app.use(express.json());
+
+app.use('/auth', authRoutes);
 
 app.get('/meals', async (req, res) => {
   //const meals = await fs.readFile('./data/available-meals.json', 'utf8');

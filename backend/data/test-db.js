@@ -1,7 +1,7 @@
 import pkg from 'pg';
 const { Pool } = pkg;
 
-const pool = new Pool({
+export const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'test-yourself',
@@ -11,7 +11,7 @@ const pool = new Pool({
 
 export async function getMeals() {
   const result = await pool.query('SELECT * FROM meals');
-  console.log(result.rows);
+  //console.log(result.rows);
   return result.rows;
 }
 
