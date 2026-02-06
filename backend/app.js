@@ -92,7 +92,7 @@ app.get('/cart', authMiddleware, async (req, res) => {
   }
 });
 
-app.post('/cart', authMiddleware, async (req, res) => {
+app.post('/cart/add', authMiddleware, async (req, res) => {
   const { mealId, name, price } = req.body;
   const userId = req.userId;
 
@@ -161,6 +161,75 @@ app.post('/cart', authMiddleware, async (req, res) => {
     );
 
     res.status(200).json({ message: 'Item added to cart' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/cart/remove', authMiddleware, async (req, res) => {
+  const userId = req.userId;
+  const { mealId } = req.body;
+
+  try {
+    // find cart
+    const cartResult = await pool.query(
+      'SELECT id FROM carts WHERE user_id = $1',
+      [userId],
+    );
+
+    if (cartResult.rows.length === 0) {
+      return res.status(400).json({ message: 'Cart not found' });
+    }
+
+    const cartId = cartResult.rows[0].id;
+
+    // get the cart item
+    const itemResult = await pool.query(
+      'SELECT quantity FROM cart_items WHERE cart_id = $1 AND meal_id = $2',
+      [cartId, mealId],
+    );
+
+    if (itemResult.rows.length === 0) {
+      return res.status(400).json({ message: 'Item not found in cart' });
+    }
+
+    const currentQuantity = itemResult.rows[0].quantity;
+
+    if (currentQuantity > 1) {
+      // decrease quantity
+      await pool.query(
+        `
+        UPDATE cart_items
+        SET quantity = quantity - 1,
+            total_price = (quantity - 1) * price
+        WHERE cart_id = $1 AND meal_id = $2
+        `,
+        [cartId, mealId],
+      );
+    } else {
+      // remove item completely
+      await pool.query(
+        'DELETE FROM cart_items WHERE cart_id = $1 AND meal_id = $2',
+        [cartId, mealId],
+      );
+    }
+
+    // update cart total_quantity
+    await pool.query(
+      `
+      UPDATE carts
+      SET total_quantity = (
+        SELECT COALESCE(SUM(quantity),0)
+        FROM cart_items
+        WHERE cart_id = $1
+      )
+      WHERE id = $1
+      `,
+      [cartId],
+    );
+
+    res.json({ message: 'Item updated/removed' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });

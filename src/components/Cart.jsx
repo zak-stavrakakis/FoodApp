@@ -16,13 +16,55 @@ export default function Cart({ onClose, onCheckout }) {
   );
   const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
 
-  const removeItemHandler = (id) => {
-    dispatch(cartActions.removeItemFromCart(id))
-  }
+  // const removeItemHandler = (id) => {
+  //   dispatch(cartActions.removeItemFromCart(id))
+  // }
 
-  const addItemHandler = (item) => {
-    dispatch(cartActions.addItemToCart({ id: item.id, name: item.name, price: item.price }));
-  }
+  const removeItemHandler = async (item) => {
+    dispatch(cartActions.removeItemFromCart(item.id));
+
+    const token = localStorage.getItem('token');
+
+    await fetch('http://localhost:3000/cart/remove', {
+      method: 'POST', // or PATCH
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        mealId: item.id,
+      }),
+    });
+  };
+
+  // const addItemHandler = (item) => {
+  //   dispatch(cartActions.addItemToCart({ id: item.id, name: item.name, price: item.price }));
+  // }
+
+  const addItemHandler = async (item) => {
+    dispatch(
+      cartActions.addItemToCart({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+      }),
+    );
+
+    const token = localStorage.getItem('token');
+
+    await fetch('http://localhost:3000/cart/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        mealId: item.id,
+        name: item.name,
+        price: item.price,
+      }),
+    });
+  };
 
   return (
     <div className='card'>
@@ -39,13 +81,9 @@ export default function Cart({ onClose, onCheckout }) {
                   <span> ({item.totalPrice})</span>
                 </div>
                 <div className='cart-item-actions'>
-                  <button onClick={() => removeItemHandler(item.id)}>
-                    -
-                  </button>
+                  <button onClick={() => removeItemHandler(item)}>-</button>
                   <span>{item.quantity}</span>
-                  <button onClick={() => addItemHandler(item)}>
-                    +
-                  </button>
+                  <button onClick={() => addItemHandler(item)}>+</button>
                 </div>
               </li>
             );

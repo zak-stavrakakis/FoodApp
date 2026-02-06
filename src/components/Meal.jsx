@@ -11,7 +11,7 @@ export default function Meal({ id, image, name, price, description }) {
   const addToCartHandler = async () => {
     const token = localStorage.getItem('token');
 
-    await fetch('http://localhost:3000/cart', {
+    await fetch('http://localhost:3000/cart/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
