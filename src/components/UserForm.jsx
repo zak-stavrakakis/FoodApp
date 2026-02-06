@@ -1,25 +1,33 @@
-import { FoodCartContext } from '../store/food-cart-context';
+//import { FoodCartContext } from '../store/food-cart-context';
 import { useContext } from 'react';
 import { postOrders } from '../http.js';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { cartActions } from '../redux-store/cart-slice';
 
 export default function UserForm({ onClose }) {
-  const { items } = useContext(FoodCartContext);
+  //const { items } = useContext(FoodCartContext);
+  const cartItems = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
   async function handleSubmit(event) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
-    console.log('Submitted data:', data);
-    console.log('items', items);
+    // console.log('Submitted data:', data);
+    // console.log('items', cartItems);
 
     const order = {
       customer: data,
-      items: items,
+      items: cartItems,
     };
+
+    console.log(order);
 
     try {
       await postOrders(order);
+      dispatch(cartActions.replaceCart({ totalQuantity: 0, items: [] }));
       onClose();
     } catch (error) {
       log(error);
@@ -44,7 +52,7 @@ export default function UserForm({ onClose }) {
 
       <div className='control'>
         <label>Postal Code</label>
-        <input name='postal-code' required />
+        <input name='postalCode' required />
       </div>
 
       <div className='control'>

@@ -4,12 +4,13 @@ import FoodContextProvider from './store/food-cart-context.jsx';
 import Meals from './components/Meals.jsx';
 import Meal from './components/Meal.jsx';
 import Login from './components/Login.jsx';
-import { fetchAllMeals } from './http.js';
+import { fetchAllMeals, fetchAllOrders } from './http.js';
 import { useDispatch } from 'react-redux';
 import { cartActions } from './redux-store/cart-slice.js';
 
 function App() {
   const [meals, setMeals] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState();
   const token = localStorage.getItem('token');
@@ -55,6 +56,22 @@ function App() {
     fetchMeals();
   }, []);
 
+  useEffect(() => {
+    async function fetchOrders() {
+      setIsFetching(true);
+      try {
+        const orders = await fetchAllOrders();
+        console.log(orders);
+
+        setOrders(orders);
+      } catch (error) {
+        setError({ message: error.message || 'Failed to fetch meals.' });
+      }
+    }
+
+    fetchOrders();
+  }, []);
+
   return !token ? (
     <Login onLogin={() => window.location.reload()} />
   ) : (
@@ -70,6 +87,11 @@ function App() {
           </li>
         ))}
       </Meals>
+      {/* {orders.map((order) => (
+        <li key={order.id} className='meal-item'>
+          {order.id}
+        </li>
+      ))} */}
     </>
   );
 }
