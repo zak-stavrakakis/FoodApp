@@ -8,7 +8,21 @@ export default function Meal({ id, image, name, price, description }) {
   //const { addItemToCart } = useContext(FoodCartContext);
   const dispatch = useDispatch();
 
-  const addToCartHandler = () => {
+  const addToCartHandler = async () => {
+    const token = localStorage.getItem('token');
+
+    await fetch('http://localhost:3000/cart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        mealId: id,
+        name,
+        price,
+      }),
+    });
     dispatch(cartActions.addItemToCart({ id, name, price }));
   };
   return (

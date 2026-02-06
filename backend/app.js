@@ -35,81 +35,135 @@ app.get('/meals', async (req, res) => {
 
 // --- Auth middleware ---
 function authMiddleware(req, res, next) {
-  const token = req.headers['authorization']?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'No token' });
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ message: 'No token' });
+  }
+
+  const token = authHeader.split(' ')[1];
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.userId = decoded.id;
+    req.userId = decoded.userId;
     next();
   } catch (err) {
-    console.log(err);
-
-    return res.status(403).json({ error: 'Invalid token' });
+    return res.status(401).json({ message: 'Invalid token' });
   }
 }
 
 // --- Get cart ---
 app.get('/cart', authMiddleware, async (req, res) => {
   const userId = req.userId;
+
   try {
+    // find cart
     const cartResult = await pool.query(
-      `SELECT c.id AS cart_id, ci.*
-       FROM carts c
-       LEFT JOIN cart_items ci ON c.id = ci.cart_id
-       WHERE c.user_id = $1`,
+      'SELECT id, total_quantity FROM carts WHERE user_id = $1',
       [userId],
     );
 
-    const cart = cartResult.rows.map((row) => ({
-      id: row.product_id,
-      name: row.name,
-      price: row.price,
-      quantity: row.quantity,
-    }));
+    if (cartResult.rows.length === 0) {
+      return res.json({ totalQuantity: 0, items: [] });
+    }
 
-    res.json({ cart });
+    const cartId = cartResult.rows[0].id;
+    const totalQuantity = cartResult.rows[0].total_quantity;
+
+    // get cart items
+    const itemsResult = await pool.query(
+      'SELECT meal_id AS id, name, price, quantity, total_price FROM cart_items WHERE cart_id = $1',
+      [cartId],
+    );
+
+    res.json({
+      totalQuantity,
+      items: itemsResult.rows.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: parseFloat(item.price),
+        quantity: item.quantity,
+        totalPrice: parseFloat(item.total_price),
+      })),
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Database error' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
 app.post('/cart', authMiddleware, async (req, res) => {
+  const { mealId, name, price } = req.body;
   const userId = req.userId;
-  const { cart } = req.body;
-  if (!cart) return res.status(400).json({ error: 'Cart is required' });
+
+  console.log(mealId, name, price, userId);
 
   try {
-    // Get or create cart
+    // 1️⃣ find or create cart
     let cartResult = await pool.query(
       'SELECT id FROM carts WHERE user_id = $1',
       [userId],
     );
+
     let cartId;
+
     if (cartResult.rows.length === 0) {
       const newCart = await pool.query(
-        'INSERT INTO carts (user_id) VALUES ($1) RETURNING id',
+        'INSERT INTO carts (user_id, total_quantity) VALUES ($1, 0) RETURNING id',
         [userId],
       );
       cartId = newCart.rows[0].id;
     } else {
       cartId = cartResult.rows[0].id;
-      await pool.query('DELETE FROM cart_items WHERE cart_id = $1', [cartId]);
     }
 
-    // Insert new items
-    for (let item of cart) {
+    // 2️⃣ check if item already exists
+    const itemResult = await pool.query(
+      'SELECT id, quantity FROM cart_items WHERE cart_id = $1 AND meal_id = $2',
+      [cartId, mealId],
+    );
+
+    if (itemResult.rows.length > 0) {
+      // update quantity
       await pool.query(
-        'INSERT INTO cart_items (cart_id, product_id, name, price, quantity) VALUES ($1,$2,$3,$4,$5)',
-        [cartId, item.id, item.name, item.price, item.quantity],
+        `
+        UPDATE cart_items
+        SET
+          quantity = quantity + 1,
+          total_price = (quantity + 1) * price
+        WHERE cart_id = $1 AND meal_id = $2
+        `,
+        [cartId, mealId],
+      );
+    } else {
+      // insert new item
+      await pool.query(
+        `
+        INSERT INTO cart_items (cart_id, meal_id, name, price, quantity, total_price)
+        VALUES ($1, $2, $3, $4, 1, $4)
+        `,
+        [cartId, mealId, name, price],
       );
     }
 
-    res.json({ success: true });
+    // 3️⃣ update cart total quantity
+    await pool.query(
+      `
+      UPDATE carts
+      SET total_quantity = (
+        SELECT SUM(quantity)
+        FROM cart_items
+        WHERE cart_id = $1
+      )
+      WHERE id = $1
+      `,
+      [cartId],
+    );
+
+    res.status(200).json({ message: 'Item added to cart' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Database error' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

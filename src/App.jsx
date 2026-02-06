@@ -5,12 +5,41 @@ import Meals from './components/Meals.jsx';
 import Meal from './components/Meal.jsx';
 import Login from './components/Login.jsx';
 import { fetchAllMeals } from './http.js';
+import { useDispatch } from 'react-redux';
+import { cartActions } from './redux-store/cart-slice.js';
 
 function App() {
   const [meals, setMeals] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState();
   const token = localStorage.getItem('token');
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const response = await fetch('http://localhost:3000/cart', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch cart');
+
+        const data = await response.json();
+        // dispatch to replaceCart
+        dispatch(cartActions.replaceCart(data));
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCart();
+  }, [dispatch]);
 
   useEffect(() => {
     async function fetchMeals() {
