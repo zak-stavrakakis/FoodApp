@@ -1,16 +1,18 @@
 import logoPng from '../assets/logo.jpg';
 import { FoodCartContext } from '../store/food-cart-context';
 import { useRef, useContext } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import CartModal from './CartModal.jsx';
 
-export default function Header() {
+export default function Header({ onLogout }) {
   const modal = useRef();
   // const { items } = useContext(FoodCartContext);
 
   // const cartQuantity = items.length;
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
+  const navigate = useNavigate();
 
   function handleOpenCartClick() {
     modal.current.open();
@@ -18,25 +20,11 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:3000/auth/logout', {
-        method: 'POST',
-        //credentials: 'include', // important if using cookies
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (response.ok) {
-        // If using JWT stored in localStorage
-        localStorage.removeItem('token');
-
-        alert('Logged out successfully!');
-        // Redirect to login page
-        window.location.href = '/login';
-      } else {
-        const data = await response.json();
-        console.error('Logout failed:', data.message);
-      }
-    } catch (error) {
-      console.error('Network error during logout:', error);
+      await fetch('http://localhost:3000/auth/logout', { method: 'POST' });
+      onLogout();
+      navigate('/login', { replace: true });
+    } catch (err) {
+      console.error(err);
     }
   };
   return (
@@ -53,6 +41,12 @@ export default function Header() {
           </button>
           <button onClick={handleLogout}>Logout</button>
         </div>
+        <nav>
+          <Link to='/' style={{ marginRight: '10px' }}>
+            Shop
+          </Link>
+          <Link to='/orders'>Orders</Link>
+        </nav>
       </header>
     </>
   );
