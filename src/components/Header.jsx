@@ -36,7 +36,7 @@ export default function Header({ onLogout }) {
           <p>REACTFOOD</p>
         </div>
         <div>
-          <button onClick={handleOpenCartClick}>
+          <button onClick={handleOpenCartClick} className='button'>
             Cart <span>({cartQuantity})</span>
           </button>
           <button onClick={handleLogout}>Logout</button>
