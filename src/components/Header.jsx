@@ -31,22 +31,31 @@ export default function Header({ onLogout }) {
     <>
       <CartModal ref={modal} title='Your Cart' cartQuantity={cartQuantity} />
       <header id='main-header'>
-        <div id='title'>
-          <img src={logoPng} alt='logo' />
-          <p>REACTFOOD</p>
+        <div className='left-header'>
+          <div id='title'>
+            <img src={logoPng} alt='logo' />
+            <p>REACTFOOD</p>
+          </div>
+          <nav style={{ marginLeft: '5rem' }}>
+            <Link to='/' style={{ marginRight: '10px' }}>
+              Shop
+            </Link>
+            <Link to='/orders'>Orders</Link>
+          </nav>
         </div>
+
         <div>
-          <button onClick={handleOpenCartClick} className='button'>
+          <button
+            onClick={handleOpenCartClick}
+            className='button'
+            style={{ marginRight: '2rem' }}
+          >
             Cart <span>({cartQuantity})</span>
           </button>
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout} className='button'>
+            Logout
+          </button>
         </div>
-        <nav>
-          <Link to='/' style={{ marginRight: '10px' }}>
-            Shop
-          </Link>
-          <Link to='/orders'>Orders</Link>
-        </nav>
       </header>
     </>
   );

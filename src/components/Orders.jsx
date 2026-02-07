@@ -1,13 +1,13 @@
 import Header from './Header.jsx';
+import Order from './Order.jsx';
 
 export default function Orders({ orders, onLogout }) {
   return (
     <>
       <Header onLogout={onLogout} />
-      <h2>Your Orders</h2>
-      <ul>
+      <ul id='meals'>
         {orders.map((order) => (
-          <li key={order.id}>{order.id}</li>
+          <Order key={order.id} order={order} />
         ))}
       </ul>
     </>
