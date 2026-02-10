@@ -31,7 +31,9 @@ export default function Meal({ id, image, name, price, description }) {
           <p className='meal-item-description'>{description}</p>
         </div>
         <p className='meal-item-actions'>
-          <button onClick={addToCartHandler}>Add to Cart</button>
+          <button onClick={addToCartHandler} className='button'>
+            Add to Cart
+          </button>
         </p>
       </div>
     </article>

@@ -82,7 +82,9 @@ export default function Cart({ onClose, onCheckout }) {
         Cart Total: <strong>{formattedTotalPrice}</strong>
       </p>
       <div className='modal-actions'>
-        <button onClick={onClose}>Close</button>
+        <button onClick={onClose} className='button'>
+          Close
+        </button>
 
         {cartItems.length > 0 && (
           <button className='button' onClick={onCheckout}>

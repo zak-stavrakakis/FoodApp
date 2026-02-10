@@ -34,7 +34,14 @@ export default function Header({ onLogout }) {
             <p>REACTFOOD</p>
           </div>
           <nav style={{ marginLeft: '5rem' }}>
-            <Link to='/' style={{ marginRight: '10px' }}>
+            <Link
+              to='/'
+              style={{
+                marginRight: '10px',
+                color: 'white',
+                textDecoration: 'none',
+              }}
+            >
               Shop
             </Link>
             <Link to='/orders'>Orders</Link>
