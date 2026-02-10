@@ -336,6 +336,7 @@ app.post('/orders', authMiddleware, async (req, res) => {
 
 app.get('/orders', authMiddleware, async (req, res) => {
   const userId = req.userId;
+  console.log(userId);
 
   try {
     const ordersResult = await pool.query(
