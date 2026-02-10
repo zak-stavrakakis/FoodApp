@@ -6,7 +6,6 @@ import { pool } from '../data/test-db.js';
 const router = express.Router();
 const JWT_SECRET = 'dev_secret'; // move to env later
 
-// REGISTER
 router.post('/register', async (req, res) => {
   const { email, password } = req.body;
 
@@ -26,7 +25,6 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// LOGIN
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 

@@ -8,11 +8,3 @@ export const pool = new Pool({
   password: 'zak1796',
   port: 5432,
 });
-
-export async function getMeals() {
-  const result = await pool.query('SELECT * FROM meals');
-  //console.log(result.rows);
-  return result.rows;
-}
-
-// getMeals();

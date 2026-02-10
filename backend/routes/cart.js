@@ -1,31 +1,11 @@
 import express from 'express';
-//import bcrypt from 'bcrypt';
-//import jwt from 'jsonwebtoken';
+
 import { pool } from '../data/test-db.js';
 import { authMiddleware } from '../controllers/auth.middleware.js';
 
 const router = express.Router();
-const JWT_SECRET = 'dev_secret'; // move to env later
+const JWT_SECRET = 'dev_secret';
 
-// function authMiddleware(req, res, next) {
-//   const authHeader = req.headers.authorization;
-
-//   if (!authHeader) {
-//     return res.status(401).json({ message: 'No token' });
-//   }
-
-//   const token = authHeader.split(' ')[1];
-
-//   try {
-//     const decoded = jwt.verify(token, JWT_SECRET);
-//     req.userId = decoded.userId;
-//     next();
-//   } catch (err) {
-//     return res.status(401).json({ message: 'Invalid token' });
-//   }
-// }
-
-// --- Get cart ---
 router.get('', authMiddleware, async (req, res) => {
   const userId = req.userId;
 
