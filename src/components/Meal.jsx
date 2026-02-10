@@ -1,11 +1,7 @@
-import { useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { cartActions } from '../redux-store/cart-slice';
 
-import { FoodCartContext } from '../store/food-cart-context';
-
 export default function Meal({ id, image, name, price, description }) {
-  //const { addItemToCart } = useContext(FoodCartContext);
   const dispatch = useDispatch();
 
   const addToCartHandler = async () => {

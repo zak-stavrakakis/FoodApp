@@ -1,12 +1,8 @@
-import { FoodCartContext } from '../store/food-cart-context';
-import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { cartActions } from '../redux-store/cart-slice';
 
 export default function Cart({ onClose, onCheckout }) {
-  //const { items, updateItemQuantity } = useContext(FoodCartContext);
-  //console.log(items);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
 
@@ -15,10 +11,6 @@ export default function Cart({ onClose, onCheckout }) {
     0,
   );
   const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
-
-  // const removeItemHandler = (id) => {
-  //   dispatch(cartActions.removeItemFromCart(id))
-  // }
 
   const removeItemHandler = async (item) => {
     dispatch(cartActions.removeItemFromCart(item.id));
@@ -36,10 +28,6 @@ export default function Cart({ onClose, onCheckout }) {
       }),
     });
   };
-
-  // const addItemHandler = (item) => {
-  //   dispatch(cartActions.addItemToCart({ id: item.id, name: item.name, price: item.price }));
-  // }
 
   const addItemHandler = async (item) => {
     dispatch(

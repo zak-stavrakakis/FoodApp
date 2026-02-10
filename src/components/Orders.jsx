@@ -1,7 +1,7 @@
 import Header from './Header.jsx';
 import Order from './Order.jsx';
 import { useState, useEffect } from 'react';
-import { fetchAllMeals, fetchAllOrders } from '../http.js';
+import { fetchAllOrders } from '../http.js';
 
 export default function Orders({ onLogout }) {
   const [orders, setOrders] = useState([]);

@@ -1,6 +1,5 @@
 import logoPng from '../assets/logo.jpg';
-import { FoodCartContext } from '../store/food-cart-context';
-import { useRef, useContext } from 'react';
+import { useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -8,9 +7,7 @@ import CartModal from './CartModal.jsx';
 
 export default function Header({ onLogout }) {
   const modal = useRef();
-  // const { items } = useContext(FoodCartContext);
 
-  // const cartQuantity = items.length;
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
   const navigate = useNavigate();
 
