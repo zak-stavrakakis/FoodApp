@@ -126,20 +126,20 @@ function App() {
       }
     }
     fetchMeals();
-  }, []);
+  }, [token]);
 
   // Fetch orders
-  useEffect(() => {
-    async function fetchOrders() {
-      try {
-        const data = await fetchAllOrders();
-        setOrders(data);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    fetchOrders();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchOrders() {
+  //     try {
+  //       const data = await fetchAllOrders();
+  //       setOrders(data);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   }
+  //   fetchOrders();
+  // }, [token]);
 
   // Fetch cart from backend
   useEffect(() => {
@@ -194,7 +194,7 @@ function App() {
           path='/orders'
           element={
             <ProtectedRoute token={token}>
-              <Orders orders={orders} onLogout={handleLogout} />
+              <Orders onLogout={handleLogout} />
             </ProtectedRoute>
           }
         />
