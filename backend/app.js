@@ -33,7 +33,7 @@ app.use('/auth', authRoutes);
 app.use('/cart', cartRoutes);
 app.use('/orders', ordersRoutes);
 
-app.get('/meals', authMiddleware, async (req, res) => {
+app.get('/meals', async (req, res) => {
   const meals = await getMeals();
   res.json(meals);
 });
