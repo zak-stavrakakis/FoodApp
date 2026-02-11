@@ -1,5 +1,5 @@
 import express from 'express';
-import { authMiddleware } from '../controllers/auth.middleware.js';
+import { authMiddleware, isAdmin } from '../controllers/auth.middleware.js';
 
 import { pool } from '../data/test-db.js';
 
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.patch('/:id', authMiddleware, async (req, res) => {
+router.patch('/:id', authMiddleware, isAdmin, async (req, res) => {
   const { id } = req.params;
   const { name, price, description } = req.body;
   const userRole = req.user.role;
