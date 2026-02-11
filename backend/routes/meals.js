@@ -6,9 +6,9 @@ import { pool } from '../data/test-db.js';
 const router = express.Router();
 const JWT_SECRET = 'dev_secret'; // move to env later
 
-router.get('', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM meals');
+    const result = await pool.query('SELECT * FROM meals order by name asc');
 
     res.json(result.rows);
   } catch (err) {
@@ -17,13 +17,11 @@ router.get('', async (req, res) => {
   }
 });
 
-router.post('/update', authMiddleware, async (req, res) => {
-  const { id, name, price, description } = req.body;
+router.patch('/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const { name, price, description } = req.body;
   const userRole = req.user.role;
-  console.log(id, name, price, description);
-  if (userRole === 'user') {
-    console.log('user');
-
+  if (userRole !== 'admin') {
     return res.status(500).json({ message: 'Failed to update meal' });
   }
   try {

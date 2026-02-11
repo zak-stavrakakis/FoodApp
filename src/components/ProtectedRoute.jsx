@@ -1,7 +1,13 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-export default function ProtectedRoute({ token, children, role }) {
+export default function ProtectedRoute({ children }) {
+  const { pathname } = useLocation();
+  const { user, token } = useSelector((state) => state.user);
   if (!token) return <Navigate to='/login' replace />;
-  if (role === 'admin') return <Navigate to='/' replace />;
+  if (user?.role === 'admin' && pathname.startsWith('/orders')) {
+    return <Navigate to='/' replace />;
+  }
+
   return children;
 }

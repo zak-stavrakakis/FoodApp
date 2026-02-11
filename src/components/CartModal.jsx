@@ -28,7 +28,7 @@ const CartModal = forwardRef(function Modal({ title, cartQuantity }, ref) {
     <dialog className='modal' ref={dialog}>
       <h2>{title}</h2>
       {showForm ? (
-        <UserForm onClose={onClose}/>
+        <UserForm onClose={onClose} onGoBack={() => setShowForm(false)} />
       ) : (
         <Cart onClose={onClose} onCheckout={onCheckout} />
       )}

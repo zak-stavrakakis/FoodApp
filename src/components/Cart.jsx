@@ -1,8 +1,10 @@
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { cartActions } from '../redux-store/cart-slice';
+import useToken from '../hooks/useToken';
 
 export default function Cart({ onClose, onCheckout }) {
+  const token = useToken();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
 
@@ -13,11 +15,7 @@ export default function Cart({ onClose, onCheckout }) {
   const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
 
   const removeItemHandler = async (item) => {
-    dispatch(cartActions.removeItemFromCart(item.id));
-
-    const token = localStorage.getItem('token');
-
-    await fetch('http://localhost:3000/cart/remove', {
+    const res = await fetch('http://localhost:3000/cart/remove', {
       method: 'POST', // or PATCH
       headers: {
         'Content-Type': 'application/json',
@@ -27,6 +25,11 @@ export default function Cart({ onClose, onCheckout }) {
         mealId: item.id,
       }),
     });
+    if (!res.ok) {
+      alert('Item was not removed from the cart');
+      return;
+    }
+    dispatch(cartActions.removeItemFromCart(item.id));
   };
 
   const addItemHandler = async (item) => {
@@ -37,8 +40,6 @@ export default function Cart({ onClose, onCheckout }) {
         price: item.price,
       }),
     );
-
-    const token = localStorage.getItem('token');
 
     await fetch('http://localhost:3000/cart/add', {
       method: 'POST',
@@ -66,7 +67,7 @@ export default function Cart({ onClose, onCheckout }) {
               <li key={item.id} className='cart-item'>
                 <div>
                   <span>{item.name}</span>
-                  <span> ({item.totalPrice})</span>
+                  <span> ({parseFloat(item.totalPrice).toFixed(2)})</span>
                 </div>
                 <div className='cart-item-actions'>
                   <button onClick={() => removeItemHandler(item)}>-</button>

@@ -9,8 +9,7 @@ export async function fetchAllMeals() {
   return resData;
 }
 
-export async function fetchAllOrders() {
-  const token = localStorage.getItem('token');
+export async function fetchAllOrders(token) {
   const response = await fetch('http://localhost:3000/orders', {
     method: 'GET', // optional, GET is default
     headers: {

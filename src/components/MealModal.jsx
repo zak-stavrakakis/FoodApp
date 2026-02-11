@@ -2,11 +2,13 @@ import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { mealsActions } from '../redux-store/meals-slice';
 import { useDispatch } from 'react-redux';
+import useToken from '../hooks/useToken';
 
 const MealModal = forwardRef(function Modal(
   { id, name, price, description },
   ref,
 ) {
+  const token = useToken();
   const dispatch = useDispatch();
   const dialog = useRef();
 
@@ -51,18 +53,20 @@ const MealModal = forwardRef(function Modal(
       id,
     };
 
-    console.log(meal);
-
     try {
-      const token = localStorage.getItem('token');
-      await fetch('http://localhost:3000/meals/update', {
-        method: 'POST',
+      const { id, ...rest } = meal;
+      const res = await fetch(`http://localhost:3000/meals/${meal.id}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(meal),
+        body: JSON.stringify(rest),
       });
+      if (!res.ok) {
+        alert(`Failed to update meal ${rest.name}`);
+        return;
+      }
       dispatch(mealsActions.updateMeal(meal));
       onClose();
     } catch (error) {

@@ -1,10 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useToken from '../hooks/useToken';
+import { useDispatch } from 'react-redux';
+import { userActions } from '../redux-store/user-slice';
 
-export default function Login({ onLogin }) {
+export default function Login({}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const token = useToken();
+  const dispatch = useDispatch();
 
   const submit = async (e) => {
     e.preventDefault();
@@ -14,18 +19,23 @@ export default function Login({ onLogin }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
-      if (data.token) {
-        onLogin(data.token);
-        localStorage.setItem('token', data.token);
-        navigate('/', { replace: true });
-      } else {
+      if (!res.ok) {
+        dispatch(userActions.setToken(null));
+        dispatch(userActions.setUser({}));
         alert('Login failed');
+        return;
       }
+      const data = await res.json();
+      dispatch(userActions.setToken(data.token));
+      navigate('/', { replace: true });
     } catch (err) {
       console.error(err);
     }
   };
+
+  if (token) {
+    return null;
+  }
 
   return (
     <div className='login-page'>

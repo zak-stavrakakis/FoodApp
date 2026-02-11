@@ -52,9 +52,6 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  console.log('logout');
-
-  // JWT logout: frontend just deletes token
   return res.json({ message: 'Logged out successfully' });
 });
 

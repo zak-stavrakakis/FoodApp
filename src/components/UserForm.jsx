@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { cartActions } from '../redux-store/cart-slice';
 
-export default function UserForm({ onClose }) {
+export default function UserForm({ onClose, onGoBack }) {
   const cartItems = useSelector((state) => state.cart.items);
   const user = useSelector((state) => state.user.user);
-  console.log(user);
+
   const dispatch = useDispatch();
   async function handleSubmit(event) {
     event.preventDefault();
@@ -30,15 +30,11 @@ export default function UserForm({ onClose }) {
       items: cartItems,
     };
 
-    console.log(order);
-
     try {
       await postOrders(order);
       dispatch(cartActions.replaceCart({ totalQuantity: 0, items: [] }));
       onClose();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
   return (
     <form onSubmit={handleSubmit} className='control'>
@@ -68,10 +64,12 @@ export default function UserForm({ onClose }) {
       </div>
 
       <div className='modal-actions'>
-        <button type='button' onClick={() => onClose()}>
+        <button className='button' type='button' onClick={() => onGoBack()}>
+          Back to Cart
+        </button>
+        <button className='button' type='button' onClick={() => onClose()}>
           Close
         </button>
-
         <button className='button' type='submit'>
           Submit
         </button>

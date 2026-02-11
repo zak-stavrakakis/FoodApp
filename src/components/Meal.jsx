@@ -7,8 +7,7 @@ import MealModal from './MealModal';
 
 export default function Meal({ id, image, name, price, description }) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
-  //console.log(user);
+  const { user, token } = useSelector((state) => state.user);
 
   const modal = useRef();
 
@@ -17,9 +16,7 @@ export default function Meal({ id, image, name, price, description }) {
   }
 
   const addToCartHandler = async () => {
-    const token = localStorage.getItem('token');
-
-    await fetch('http://localhost:3000/cart/add', {
+    const res = await fetch('http://localhost:3000/cart/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,6 +28,9 @@ export default function Meal({ id, image, name, price, description }) {
         price,
       }),
     });
+    if (!res.ok) {
+      alert('Item was not added to the cart');
+    }
     dispatch(cartActions.addItemToCart({ id, name, price }));
   };
   return (

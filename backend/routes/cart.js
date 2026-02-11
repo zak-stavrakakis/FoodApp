@@ -49,10 +49,7 @@ router.post('/add', authMiddleware, async (req, res) => {
   const { mealId, name, price } = req.body;
   const userId = req.user.userId;
 
-  console.log(mealId, name, price, userId);
-
   try {
-    // 1️⃣ find or create cart
     let cartResult = await pool.query(
       'SELECT id FROM carts WHERE user_id = $1',
       [userId],
@@ -70,14 +67,12 @@ router.post('/add', authMiddleware, async (req, res) => {
       cartId = cartResult.rows[0].id;
     }
 
-    // 2️⃣ check if item already exists
     const itemResult = await pool.query(
       'SELECT id, quantity FROM cart_items WHERE cart_id = $1 AND meal_id = $2',
       [cartId, mealId],
     );
 
     if (itemResult.rows.length > 0) {
-      // update quantity
       await pool.query(
         `
         UPDATE cart_items
@@ -89,7 +84,6 @@ router.post('/add', authMiddleware, async (req, res) => {
         [cartId, mealId],
       );
     } else {
-      // insert new item
       await pool.query(
         `
         INSERT INTO cart_items (cart_id, meal_id, name, price, quantity, total_price)
@@ -99,7 +93,6 @@ router.post('/add', authMiddleware, async (req, res) => {
       );
     }
 
-    // 3️⃣ update cart total quantity
     await pool.query(
       `
       UPDATE carts

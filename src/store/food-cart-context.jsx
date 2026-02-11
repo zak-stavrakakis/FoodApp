@@ -22,8 +22,6 @@ function foodCartReducer(state, action) {
       };
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
-      console.log(action.payload);
-
       updatedItems.push({
         id: action.payload.id,
         name: action.payload.name,

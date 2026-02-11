@@ -5,12 +5,12 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
 import CartModal from './CartModal.jsx';
+import { userActions } from '../redux-store/user-slice.js';
 
-export default function Header({ onLogout }) {
+export default function Header({}) {
   //const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  console.log(user);
-
+  const dispatch = useDispatch();
   const modal = useRef();
 
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
@@ -22,8 +22,15 @@ export default function Header({ onLogout }) {
 
   const handleLogout = async () => {
     try {
-      await fetch('http://localhost:3000/auth/logout', { method: 'POST' });
-      onLogout();
+      const res = await fetch('http://localhost:3000/auth/logout', {
+        method: 'POST',
+      });
+      if (!res.ok) {
+        alert('Failed to logout');
+        return;
+      }
+      dispatch(userActions.setToken(null));
+      dispatch(userActions.setUser({}));
       navigate('/login', { replace: true });
     } catch (err) {
       console.error(err);

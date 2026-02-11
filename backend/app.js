@@ -17,7 +17,7 @@ app.use(
   cors({
     origin: 'http://localhost:5173', // your React app
     credentials: true, // needed if using cookies
-    methods: ['GET', 'POST', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'], // include JWT header if needed
   }),
 );

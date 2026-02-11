@@ -9,7 +9,6 @@ const JWT_SECRET = 'dev_secret'; // move to env later
 
 router.get('', authMiddleware, async (req, res) => {
   const userId = req.user.userId;
-  console.log(userId);
 
   try {
     const ordersResult = await pool.query(
