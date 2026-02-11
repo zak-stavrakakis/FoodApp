@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import { fetchAllMeals, fetchAllOrders } from './http.js';
 import { cartActions } from './redux-store/cart-slice.js';
 import { userActions } from './redux-store/user-slice.js';
+import { mealsActions } from './redux-store/meals-slice.js';
 
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem('token'));
@@ -23,12 +24,14 @@ function App() {
       try {
         const data = await fetchAllMeals();
         setMeals(data);
+        console.log(data);
+        dispatch(mealsActions.setMeals(data));
       } catch (err) {
         console.error(err);
       }
     }
     fetchMeals();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -93,7 +96,7 @@ function App() {
           path='/'
           element={
             <ProtectedRoute token={token} admin={false}>
-              <Shop meals={meals} onLogout={handleLogout} />
+              <Shop onLogout={handleLogout} />
             </ProtectedRoute>
           }
         />

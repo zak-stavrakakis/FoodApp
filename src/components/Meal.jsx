@@ -8,7 +8,7 @@ import MealModal from './MealModal';
 export default function Meal({ id, image, name, price, description }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  console.log(user);
+  //console.log(user);
 
   const modal = useRef();
 

@@ -1,10 +1,13 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { mealsActions } from '../redux-store/meals-slice';
+import { useDispatch } from 'react-redux';
 
 const MealModal = forwardRef(function Modal(
   { id, name, price, description },
   ref,
 ) {
+  const dispatch = useDispatch();
   const dialog = useRef();
 
   useImperativeHandle(ref, () => {
@@ -42,7 +45,7 @@ const MealModal = forwardRef(function Modal(
         },
         body: JSON.stringify(meal),
       });
-
+      dispatch(mealsActions.updateMeal(meal));
       onClose();
     } catch (error) {
       log(error);
