@@ -1,4 +1,5 @@
 import express from 'express';
+import { authMiddleware } from '../controllers/auth.middleware.js';
 
 import { pool } from '../data/test-db.js';
 
@@ -16,17 +17,22 @@ router.get('', async (req, res) => {
   }
 });
 
-router.post('/update', async (req, res) => {
+router.post('/update', authMiddleware, async (req, res) => {
   const { id, name, price, description } = req.body;
+  const userRole = req.user.role;
   console.log(id, name, price, description);
+  if (userRole === 'user') {
+    console.log('user');
 
+    return res.status(500).json({ message: 'Failed to update meal' });
+  }
   try {
     const result = await pool.query(
       `UPDATE meals 
        SET name = $1, price = $2, description = $3
        WHERE id = $4
        RETURNING *`,
-      [name, price, description, id],
+      [name, +price, description, id],
     );
 
     if (result.rowCount === 0) {
@@ -34,7 +40,6 @@ router.post('/update', async (req, res) => {
     }
 
     res.json({
-      message: 'Update ok',
       meal: result.rows[0],
     });
   } catch (err) {
