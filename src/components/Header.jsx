@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import CartModal from './CartModal.jsx';
 import { userActions } from '../redux-store/user-slice.js';
+import { AppConfig } from '../config.js';
 
 export default function Header({}) {
   //const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export default function Header({}) {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch('http://localhost:3000/auth/logout', {
+      const res = await fetch(AppConfig.toApiUrl('auth/logout'), {
         method: 'POST',
       });
       if (!res.ok) {

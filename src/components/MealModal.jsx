@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { mealsActions } from '../redux-store/meals-slice';
 import { useDispatch } from 'react-redux';
 import useToken from '../hooks/useToken';
+import { AppConfig } from '../config';
 
 const MealModal = forwardRef(function Modal(
   { id, name, price, description },
@@ -55,7 +56,7 @@ const MealModal = forwardRef(function Modal(
 
     try {
       const { id, ...rest } = meal;
-      const res = await fetch(`http://localhost:3000/meals/${meal.id}`, {
+      const res = await fetch(AppConfig.toApiUrl(`/meals/${meal.id}`), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

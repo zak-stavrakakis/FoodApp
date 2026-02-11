@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useToken from '../hooks/useToken';
 import { useDispatch } from 'react-redux';
 import { userActions } from '../redux-store/user-slice';
+import { AppConfig } from '../config';
 
 export default function Login({}) {
   const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ export default function Login({}) {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:3000/auth/login', {
+      const res = await fetch(AppConfig.toApiUrl('auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

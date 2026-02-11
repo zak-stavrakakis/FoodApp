@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { cartActions } from '../redux-store/cart-slice';
 import useToken from '../hooks/useToken';
+import { AppConfig } from '../config';
 
 export default function Cart({ onClose, onCheckout }) {
   const token = useToken();
@@ -15,7 +16,7 @@ export default function Cart({ onClose, onCheckout }) {
   const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
 
   const removeItemHandler = async (item) => {
-    const res = await fetch('http://localhost:3000/cart/remove', {
+    const res = await fetch(AppConfig.toApiUrl('cart/remove'), {
       method: 'POST', // or PATCH
       headers: {
         'Content-Type': 'application/json',
@@ -41,7 +42,7 @@ export default function Cart({ onClose, onCheckout }) {
       }),
     );
 
-    await fetch('http://localhost:3000/cart/add', {
+    await fetch(AppConfig.toApiUrl('cart/add'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,5 +1,7 @@
+import { AppConfig } from './config';
+
 export async function fetchAllMeals() {
-  const response = await fetch('http://localhost:3000/meals');
+  const response = await fetch(AppConfig.toApiUrl('meals'));
   const resData = await response.json();
 
   if (!response.ok) {
@@ -10,7 +12,7 @@ export async function fetchAllMeals() {
 }
 
 export async function fetchAllOrders(token) {
-  const response = await fetch('http://localhost:3000/orders', {
+  const response = await fetch(AppConfig.toApiUrl('orders'), {
     method: 'GET', // optional, GET is default
     headers: {
       Authorization: `Bearer ${token}`,
@@ -27,7 +29,7 @@ export async function fetchAllOrders(token) {
 
 export async function postOrders(order) {
   const token = localStorage.getItem('token');
-  const response = await fetch('http://localhost:3000/orders', {
+  const response = await fetch(AppConfig.toApiUrl('orders'), {
     method: 'POST',
     body: JSON.stringify({ order }),
     headers: {

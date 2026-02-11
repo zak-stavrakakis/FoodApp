@@ -4,6 +4,7 @@ import { cartActions } from '../redux-store/cart-slice';
 import { useSelector } from 'react-redux';
 import { useRef } from 'react';
 import MealModal from './MealModal';
+import { AppConfig } from '../config';
 
 export default function Meal({ id, image, name, price, description }) {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export default function Meal({ id, image, name, price, description }) {
   }
 
   const addToCartHandler = async () => {
-    const res = await fetch('http://localhost:3000/cart/add', {
+    const res = await fetch(AppConfig.toApiUrl('cart/add'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +44,7 @@ export default function Meal({ id, image, name, price, description }) {
         price={price}
       />
       <article>
-        <img src={`http://localhost:3000/${image}`} alt={name} />
+        <img src={AppConfig.toServerImage(`${image}`)} alt={name} />
         <div className='product-content'>
           <div>
             <h3>{name}</h3>

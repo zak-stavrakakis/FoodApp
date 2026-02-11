@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { userActions } from '../redux-store/user-slice';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppConfig } from '../config';
 
 export default function useFetchUser() {
   const dispatch = useDispatch();
@@ -9,7 +10,7 @@ export default function useFetchUser() {
   const fetchUser = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:3000/auth/user', {
+      const res = await fetch(AppConfig.toApiUrl('auth/user'), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error('Failed to fetch user');

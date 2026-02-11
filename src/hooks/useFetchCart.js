@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useToken from './useToken';
 import { cartActions } from '../redux-store/cart-slice';
+import { AppConfig } from '../config';
 
 export default function useFetchCart() {
   const dispatch = useDispatch();
@@ -11,7 +12,7 @@ export default function useFetchCart() {
   const fetchCart = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:3000/cart', {
+      const res = await fetch(AppConfig.toApiUrl('cart'), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error('Failed to fetch cart');
