@@ -92,7 +92,7 @@ function App() {
         <Route
           path='/'
           element={
-            <ProtectedRoute token={token}>
+            <ProtectedRoute token={token} admin={false}>
               <Shop meals={meals} onLogout={handleLogout} />
             </ProtectedRoute>
           }
@@ -100,7 +100,7 @@ function App() {
         <Route
           path='/orders'
           element={
-            <ProtectedRoute token={token}>
+            <ProtectedRoute token={token} admin={true}>
               <Orders onLogout={handleLogout} />
             </ProtectedRoute>
           }
