@@ -24,7 +24,7 @@ export default function UserForm({ onClose }) {
       dispatch(cartActions.replaceCart({ totalQuantity: 0, items: [] }));
       onClose();
     } catch (error) {
-      log(error);
+      console.log(error);
     }
   }
   return (
