@@ -10,12 +10,15 @@ import { fetchAllMeals, fetchAllOrders } from './http.js';
 import { cartActions } from './redux-store/cart-slice.js';
 import { userActions } from './redux-store/user-slice.js';
 import { mealsActions } from './redux-store/meals-slice.js';
+import { useSelector } from 'react-redux';
 
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [meals, setMeals] = useState([]);
   const [orders, setOrders] = useState([]);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
 
   // Fetch meals
   useEffect(() => {
@@ -95,7 +98,7 @@ function App() {
         <Route
           path='/'
           element={
-            <ProtectedRoute token={token} admin={false}>
+            <ProtectedRoute token={token}>
               <Shop onLogout={handleLogout} />
             </ProtectedRoute>
           }
@@ -103,7 +106,7 @@ function App() {
         <Route
           path='/orders'
           element={
-            <ProtectedRoute token={token} admin={true}>
+            <ProtectedRoute token={token} role={user?.role}>
               <Orders onLogout={handleLogout} />
             </ProtectedRoute>
           }

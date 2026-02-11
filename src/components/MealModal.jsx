@@ -26,6 +26,24 @@ const MealModal = forwardRef(function Modal(
     event.preventDefault();
 
     const formData = new FormData(event.target);
+    const name = formData.get('name').trim();
+    const price = formData.get('price');
+    const description = formData.get('description').trim();
+
+    if (!name) {
+      alert('Name is required');
+      return;
+    }
+
+    if (!description) {
+      alert('Description is required');
+      return;
+    }
+
+    if (!price || Number(price) <= 0) {
+      alert('Price must be greater than 0');
+      return;
+    }
     const data = Object.fromEntries(formData.entries());
 
     const meal = {
@@ -71,7 +89,7 @@ const MealModal = forwardRef(function Modal(
           <input name='description' defaultValue={description} required />
         </div>
         <div className='modal-actions'>
-          <button type='button' onClick={onClose}>
+          <button type='button' className='button' onClick={onClose}>
             Close
           </button>
 

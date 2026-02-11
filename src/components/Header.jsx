@@ -44,13 +44,26 @@ export default function Header({ onLogout }) {
               to='/'
               style={{
                 marginRight: '10px',
+                fontSize: '20px',
                 color: 'white',
                 textDecoration: 'none',
               }}
             >
               Shop
             </Link>
-            {user.role === 'user' && <Link to='/orders'>Orders</Link>}
+            {user.role === 'user' && (
+              <Link
+                to='/orders'
+                style={{
+                  marginRight: '10px',
+                  fontSize: '20px',
+                  color: 'white',
+                  textDecoration: 'none',
+                }}
+              >
+                Orders
+              </Link>
+            )}
           </nav>
         </div>
 

@@ -5,11 +5,24 @@ import { cartActions } from '../redux-store/cart-slice';
 
 export default function UserForm({ onClose }) {
   const cartItems = useSelector((state) => state.cart.items);
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
   const dispatch = useDispatch();
   async function handleSubmit(event) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
+
+    const name = formData.get('name').trim();
+    const email = formData.get('email').trim();
+    const street = formData.get('street').trim();
+    const postalCode = formData.get('postalCode').trim();
+    const city = formData.get('city').trim();
+
+    if (!name || !email || !street || !postalCode || !city) {
+      alert('Please fill in all fields.');
+      return;
+    }
     const data = Object.fromEntries(formData.entries());
 
     const order = {
@@ -36,7 +49,7 @@ export default function UserForm({ onClose }) {
 
       <div className='control'>
         <label>Email</label>
-        <input type='email' name='email' required />
+        <input type='email' name='email' defaultValue={user?.email} required />
       </div>
 
       <div className='control'>
