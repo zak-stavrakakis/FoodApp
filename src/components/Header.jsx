@@ -2,10 +2,15 @@ import logoPng from '../assets/logo.jpg';
 import { useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import CartModal from './CartModal.jsx';
 
 export default function Header({ onLogout }) {
+  //const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
+
   const modal = useRef();
 
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
@@ -34,6 +39,7 @@ export default function Header({ onLogout }) {
             <p>REACTFOOD</p>
           </div>
           <nav style={{ marginLeft: '5rem' }}>
+            {}
             <Link
               to='/'
               style={{
@@ -44,18 +50,21 @@ export default function Header({ onLogout }) {
             >
               Shop
             </Link>
-            <Link to='/orders'>Orders</Link>
+            {user.role === 'user' && <Link to='/orders'>Orders</Link>}
           </nav>
         </div>
 
         <div>
-          <button
-            onClick={handleOpenCartClick}
-            className='button'
-            style={{ marginRight: '2rem' }}
-          >
-            Cart <span>({cartQuantity})</span>
-          </button>
+          {user.role === 'user' && (
+            <button
+              onClick={handleOpenCartClick}
+              className='button'
+              style={{ marginRight: '2rem' }}
+            >
+              Cart <span>({cartQuantity})</span>
+            </button>
+          )}
+
           <button onClick={handleLogout} className='button'>
             Logout
           </button>

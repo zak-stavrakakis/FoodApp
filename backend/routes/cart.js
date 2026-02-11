@@ -7,7 +7,7 @@ const router = express.Router();
 const JWT_SECRET = 'dev_secret';
 
 router.get('', authMiddleware, async (req, res) => {
-  const userId = req.userId;
+  const userId = req.user.userId;
 
   try {
     // find cart
@@ -47,7 +47,7 @@ router.get('', authMiddleware, async (req, res) => {
 
 router.post('/add', authMiddleware, async (req, res) => {
   const { mealId, name, price } = req.body;
-  const userId = req.userId;
+  const userId = req.user.userId;
 
   console.log(mealId, name, price, userId);
 
@@ -121,7 +121,7 @@ router.post('/add', authMiddleware, async (req, res) => {
 });
 
 router.post('/remove', authMiddleware, async (req, res) => {
-  const userId = req.userId;
+  const userId = req.user.userId;
   const { mealId } = req.body;
 
   try {

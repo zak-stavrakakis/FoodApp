@@ -8,6 +8,7 @@ import Orders from './components/Orders.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import { fetchAllMeals, fetchAllOrders } from './http.js';
 import { cartActions } from './redux-store/cart-slice.js';
+import { userActions } from './redux-store/user-slice.js';
 
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem('token'));
@@ -18,6 +19,7 @@ function App() {
   // Fetch meals
   useEffect(() => {
     async function fetchMeals() {
+      if (!token) return;
       try {
         const data = await fetchAllMeals();
         setMeals(data);
@@ -43,6 +45,25 @@ function App() {
       }
     };
     fetchCart();
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!token) return;
+      try {
+        const res = await fetch('http://localhost:3000/auth/user', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error('Failed to fetch user');
+        const data = await res.json();
+        console.log(data);
+
+        dispatch(userActions.setUser(data));
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUser();
   }, [dispatch, token]);
 
   const handleLogin = (token) => {

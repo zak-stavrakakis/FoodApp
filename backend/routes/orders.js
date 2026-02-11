@@ -8,7 +8,7 @@ const router = express.Router();
 const JWT_SECRET = 'dev_secret'; // move to env later
 
 router.get('', authMiddleware, async (req, res) => {
-  const userId = req.userId;
+  const userId = req.user.userId;
   console.log(userId);
 
   try {
@@ -49,7 +49,7 @@ router.get('', authMiddleware, async (req, res) => {
 });
 
 router.post('', authMiddleware, async (req, res) => {
-  const userId = req.userId;
+  const userId = req.user.userId;
   const orderData = req.body.order;
 
   if (!orderData || !orderData.items || orderData.items.length === 0) {
