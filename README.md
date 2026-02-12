@@ -129,12 +129,6 @@ Backend Setup
 cd backend
 npm install
 
-Create .env file:
-
-PORT=5000
-DATABASE_URL=your_connection_string
-JWT_SECRET=your_secret
-
 Run:
 npm run dev
 
