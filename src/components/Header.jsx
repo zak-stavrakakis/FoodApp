@@ -9,7 +9,7 @@ import { userActions } from '../redux-store/user-slice.js';
 import { AppConfig } from '../config.js';
 
 export default function Header({}) {
-  //const dispatch = useDispatch();
+ 
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const modal = useRef();

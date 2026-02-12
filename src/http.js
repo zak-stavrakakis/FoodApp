@@ -13,7 +13,7 @@ export async function fetchAllMeals() {
 
 export async function fetchAllOrders(token) {
   const response = await fetch(AppConfig.toApiUrl('orders'), {
-    method: 'GET', // optional, GET is default
+    method: 'GET', 
     headers: {
       Authorization: `Bearer ${token}`,
     },

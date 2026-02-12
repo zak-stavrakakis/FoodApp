@@ -12,13 +12,12 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// ✅ CORS configuration
 app.use(
   cors({
-    origin: 'http://localhost:5173', // your React app
-    credentials: true, // needed if using cookies
+    origin: 'http://localhost:5173',
+    credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'], // include JWT header if needed
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
 

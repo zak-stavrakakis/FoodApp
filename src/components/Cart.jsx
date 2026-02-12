@@ -17,7 +17,7 @@ export default function Cart({ onClose, onCheckout }) {
 
   const removeItemHandler = async (item) => {
     const res = await fetch(AppConfig.toApiUrl('cart/remove'), {
-      method: 'POST', // or PATCH
+      method: 'POST', 
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ export default function Cart({ onClose, onCheckout }) {
       {cartItems.length > 0 && (
         <ul>
           {cartItems.map((item) => {
-            //const formattedPrice = `$${item.price.toFixed(2)}`;
+            
 
             return (
               <li key={item.id} className='cart-item'>

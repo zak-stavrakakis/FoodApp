@@ -16,17 +16,9 @@ export function authMiddleware(req, res, next) {
       return res.status(401).json({ error: 'Invalid token' });
     }
 
-    req.user = user; // contains { userId, role }
+    req.user = user;
     next();
   });
-
-  // try {
-  //   const decoded = jwt.verify(token, JWT_SECRET);
-  //   req.userId = decoded.userId;
-  //   next();
-  // } catch (err) {
-  //   return res.status(401).json({ message: 'Invalid token' });
-  // }
 }
 
 export function isAdmin(req, res, next) {

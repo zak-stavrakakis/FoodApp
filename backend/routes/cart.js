@@ -10,7 +10,6 @@ router.get('', authMiddleware, async (req, res) => {
   const userId = req.user.userId;
 
   try {
-    // find cart
     const cartResult = await pool.query(
       'SELECT id, total_quantity FROM carts WHERE user_id = $1',
       [userId],
@@ -23,7 +22,6 @@ router.get('', authMiddleware, async (req, res) => {
     const cartId = cartResult.rows[0].id;
     const totalQuantity = cartResult.rows[0].total_quantity;
 
-    // get cart items
     const itemsResult = await pool.query(
       'SELECT meal_id AS id, name, price, quantity, total_price FROM cart_items WHERE cart_id = $1',
       [cartId],
@@ -118,7 +116,6 @@ router.post('/remove', authMiddleware, async (req, res) => {
   const { mealId } = req.body;
 
   try {
-    // find cart
     const cartResult = await pool.query(
       'SELECT id FROM carts WHERE user_id = $1',
       [userId],
@@ -130,7 +127,6 @@ router.post('/remove', authMiddleware, async (req, res) => {
 
     const cartId = cartResult.rows[0].id;
 
-    // get the cart item
     const itemResult = await pool.query(
       'SELECT quantity FROM cart_items WHERE cart_id = $1 AND meal_id = $2',
       [cartId, mealId],
@@ -143,7 +139,6 @@ router.post('/remove', authMiddleware, async (req, res) => {
     const currentQuantity = itemResult.rows[0].quantity;
 
     if (currentQuantity > 1) {
-      // decrease quantity
       await pool.query(
         `
         UPDATE cart_items
@@ -154,14 +149,12 @@ router.post('/remove', authMiddleware, async (req, res) => {
         [cartId, mealId],
       );
     } else {
-      // remove item completely
       await pool.query(
         'DELETE FROM cart_items WHERE cart_id = $1 AND meal_id = $2',
         [cartId, mealId],
       );
     }
 
-    // update cart total_quantity
     await pool.query(
       `
       UPDATE carts

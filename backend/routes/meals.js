@@ -4,7 +4,7 @@ import { authMiddleware, isAdmin } from '../controllers/auth.middleware.js';
 import { pool } from '../data/test-db.js';
 
 const router = express.Router();
-const JWT_SECRET = 'dev_secret'; // move to env later
+const JWT_SECRET = 'dev_secret'; 
 
 router.get('/', async (req, res) => {
   try {

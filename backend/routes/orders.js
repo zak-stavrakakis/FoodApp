@@ -1,11 +1,9 @@
 import express from 'express';
-//import bcrypt from 'bcrypt';
-//import jwt from 'jsonwebtoken';
 import { pool } from '../data/test-db.js';
 import { authMiddleware } from '../controllers/auth.middleware.js';
 
 const router = express.Router();
-const JWT_SECRET = 'dev_secret'; // move to env later
+const JWT_SECRET = 'dev_secret'; 
 
 router.get('', authMiddleware, async (req, res) => {
   const userId = req.user.userId;
@@ -56,7 +54,7 @@ router.post('', authMiddleware, async (req, res) => {
   }
 
   try {
-    // 1️⃣ find user's cart
+    
     const cartResult = await pool.query(
       'SELECT id, total_quantity FROM carts WHERE user_id = $1',
       [userId],
@@ -69,7 +67,7 @@ router.post('', authMiddleware, async (req, res) => {
     const cartId = cartResult.rows[0].id;
     const totalQuantity = cartResult.rows[0].total_quantity;
 
-    // calculate total price
+    
     const totalPriceResult = await pool.query(
       `
       SELECT COALESCE(SUM(total_price), 0) AS total
@@ -81,7 +79,7 @@ router.post('', authMiddleware, async (req, res) => {
 
     const totalPrice = totalPriceResult.rows[0].total;
 
-    // 2️⃣ create order
+    
     const orderResult = await pool.query(
       `
       INSERT INTO orders (
@@ -109,7 +107,7 @@ router.post('', authMiddleware, async (req, res) => {
 
     const orderId = orderResult.rows[0].id;
 
-    // 3️⃣ copy cart items → order_items
+    
     await pool.query(
       `
       INSERT INTO order_items (order_id, meal_id, name, price, quantity, total_price)
@@ -126,7 +124,7 @@ router.post('', authMiddleware, async (req, res) => {
       [orderId, cartId],
     );
 
-    // 4️⃣ clear cart
+    
     await pool.query('DELETE FROM cart_items WHERE cart_id = $1', [cartId]);
 
     await pool.query('UPDATE carts SET total_quantity = 0 WHERE id = $1', [

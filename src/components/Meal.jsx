@@ -1,6 +1,5 @@
 import { useDispatch } from 'react-redux';
 import { cartActions } from '../redux-store/cart-slice';
-//import { userActions } from '../redux-store/user-slice';
 import { useSelector } from 'react-redux';
 import { useRef } from 'react';
 import MealModal from './MealModal';
