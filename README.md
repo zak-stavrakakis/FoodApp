@@ -1,57 +1,71 @@
-->Food Ordering App
+# 🍔 Food Ordering App
 
--Full-Stack Role-Based Food Ordering System
+Full-Stack Role-Based Food Ordering System
 
--Overview
+---
 
- A full-stack food ordering application built with React, Redux, Node.js, Express, and PostgreSQL.
- The system implements secure authentication, role-based authorization, persistent cart management, and normalized relational database design.
+## 📌 Overview
 
-->Key Features
+A full-stack food ordering application built with **React, Redux, Node.js, Express, and PostgreSQL**.
 
--User
--JWT-based authentication
--Add/update items in cart
--Persistent cart stored in PostgreSQL
--Place orders with shipping details
+The system implements secure authentication, role-based authorization, persistent cart management, and normalized relational database design.
 
--Admin
+---
 
--Update meals
--Role-based access control
--Restricted from placing orders
+## 🚀 Key Features
 
-->Tech Stack
+### 👤 User
+- JWT-based authentication
+- Add/update items in cart
+- Persistent cart stored in PostgreSQL
+- Place orders with shipping details
 
--Frontend
--React
--Redux
--React Router
--Backend
--Node.js
--Express
--JWT Authentication
--Role-based middleware
--Database
--PostgreSQL
--Normalized relational schema
--Data integrity constraints
+### 🛠 Admin
+- Update meals
+- Role-based access control
+- Restricted from placing orders
 
-->Architecture
+---
+
+## 🧠 Tech Stack
+
+### Frontend
+- React
+- Redux
+- React Router
+
+### Backend
+- Node.js
+- Express
+- JWT Authentication
+- Role-based middleware
+
+### Database
+- PostgreSQL
+- Normalized relational schema
+- Data integrity constraints
+
+---
+
+## 🏗 Architecture
 
 React Client
-⬇
+↓
 Express REST API
-⬇
+↓
 PostgreSQL
 
--JWT secures protected routes
--Middleware enforces role authorization
--Cart and orders persisted server-side
 
-->Database Schema
+- JWT secures protected routes
+- Middleware enforces role authorization
+- Cart and orders persisted server-side
 
--users
+---
+
+## 🗄 Database Schema
+
+### users
+```sql
 CREATE TABLE public.users (
     id integer NOT NULL,
     email text NOT NULL,
@@ -60,7 +74,6 @@ CREATE TABLE public.users (
     role text DEFAULT 'user'::text NOT NULL
 );
 
--meals
 CREATE TABLE public.meals (
     id text NOT NULL,
     name text NOT NULL,
@@ -69,7 +82,6 @@ CREATE TABLE public.meals (
     image text
 );
 
--carts
 CREATE TABLE public.carts (
     id integer NOT NULL,
     user_id integer NOT NULL,
@@ -77,7 +89,6 @@ CREATE TABLE public.carts (
     created_at timestamp without time zone DEFAULT now()
 );
 
--cart_items
 CREATE TABLE public.cart_items (
     id integer NOT NULL,
     cart_id integer NOT NULL,
@@ -89,7 +100,6 @@ CREATE TABLE public.cart_items (
     CONSTRAINT cart_items_quantity_check CHECK ((quantity > 0))
 );
 
--orders
 CREATE TABLE public.orders (
     id integer NOT NULL,
     user_id integer NOT NULL,
@@ -102,7 +112,6 @@ CREATE TABLE public.orders (
     created_at timestamp without time zone DEFAULT now()
 );
 
--order_items
 CREATE TABLE public.order_items (
     id integer NOT NULL,
     order_id integer NOT NULL,
@@ -112,30 +121,34 @@ CREATE TABLE public.order_items (
     quantity integer NOT NULL,
     total_price numeric(10,2) NOT NULL
 );
+```
 
-->Demo Credentials
-
+🔐 Demo Credentials
 User
+
 Email: test@user.com
+
 Password: password123
 
 Admin
+
 Email: test@admin.com
+
 Password: password123
 
-Installation
+⚙ Installation
 Clone Repository
-https://github.com/zak-stavrakakis/FoodApp.git
+git clone https://github.com/zak-stavrakakis/FoodApp.git
 
-->Backend Setup
+
+Backend Setup
+
 cd backend
 npm install
-
-Run:
 npm run dev
 
-->Frontend Setup
+Frontend Setup
 
+cd frontend
 npm install
 npm run dev
-
