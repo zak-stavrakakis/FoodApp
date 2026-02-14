@@ -3,11 +3,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { pool } from '../data/test-db.js';
 import { authMiddleware } from '../controllers/auth.middleware.js';
-import type {
-  RegisterBody,
-  LoginBody,
-  UserRow,
-} from '../types/index.js';
+import { validate } from '../controllers/validate.middleware.js';
+import { registerBodySchema, loginBodySchema } from '../schemas.js';
+import type { RegisterBody, LoginBody } from '../schemas.js';
+import type { UserRow } from '../types/index.js';
 
 import type { Request, Response } from 'express';
 
@@ -16,6 +15,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post(
   '/register',
+  validate(registerBodySchema),
   async (req: Request<object, object, RegisterBody>, res: Response) => {
     const { email, password } = req.body;
 
@@ -38,6 +38,7 @@ router.post(
 
 router.post(
   '/login',
+  validate(loginBodySchema),
   async (req: Request<object, object, LoginBody>, res: Response) => {
     const { email, password } = req.body;
 

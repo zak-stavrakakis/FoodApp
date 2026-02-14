@@ -1,11 +1,10 @@
 import express from 'express';
 import { pool } from '../data/test-db.js';
 import { authMiddleware } from '../controllers/auth.middleware.js';
-import type {
-  CreateOrderBody,
-  CartRow,
-  OrderWithItems,
-} from '../types/index.js';
+import { validate } from '../controllers/validate.middleware.js';
+import { createOrderBodySchema } from '../schemas.js';
+import type { CreateOrderBody } from '../schemas.js';
+import type { CartRow, OrderWithItems } from '../types/index.js';
 
 import type { Request, Response } from 'express';
 
@@ -69,6 +68,7 @@ router.get('', authMiddleware, async (req: Request, res: Response) => {
 router.post(
   '',
   authMiddleware,
+  validate(createOrderBodySchema),
   async (req: Request<object, object, CreateOrderBody>, res: Response) => {
     if (!req.user) {
       res.status(401).json({ message: 'Unauthorized' });
@@ -77,11 +77,6 @@ router.post(
 
     const userId = req.user.userId;
     const orderData = req.body.order;
-
-    if (!orderData || !orderData.items || orderData.items.length === 0) {
-      res.status(400).json({ message: 'Missing data.' });
-      return;
-    }
 
     try {
       const cartResult = await pool.query<
