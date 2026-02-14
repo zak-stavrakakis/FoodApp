@@ -33,8 +33,13 @@ const CartModal = forwardRef<ModalHandle, CartModalProps>(function Modal(
   }
 
   return createPortal(
-    <dialog className='modal' ref={dialog}>
-      <h2>{title}</h2>
+    <dialog
+      className='bg-modal-beige rounded-md border-none shadow-[0_2px_8px_rgba(0,0,0,0.6)] p-4 w-4/5 max-w-[40rem] animate-fade-slide-up'
+      ref={dialog}
+    >
+      <h2 className='text-dark-brown font-lato font-bold text-2xl mb-4'>
+        {title}
+      </h2>
       {showForm ? (
         <UserForm onClose={onClose} onGoBack={() => setShowForm(false)} />
       ) : (

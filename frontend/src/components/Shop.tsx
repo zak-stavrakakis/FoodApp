@@ -33,7 +33,7 @@ export default function Shop() {
     <>
       <Meals>
         {mealsItems.map((meal) => (
-          <li key={meal.id} className='meal-item'>
+          <li key={meal.id} className='bg-dark rounded-2xl overflow-hidden text-center shadow-[0_1px_6px_rgba(0,0,0,0.3)]'>
             <Meal {...meal} />
           </li>
         ))}

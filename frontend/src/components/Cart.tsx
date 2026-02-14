@@ -71,37 +71,60 @@ export default function Cart({ onClose, onCheckout }: CartProps) {
   };
 
   return (
-    <div className='card'>
-      {cartItems.length === 0 && <p>No items in cart!</p>}
+    <div>
+      {cartItems.length === 0 && (
+        <p className='text-dark-brown'>No items in cart!</p>
+      )}
       {cartItems.length > 0 && (
-        <ul>
+        <ul className='list-none p-0 m-0'>
           {cartItems.map((item) => {
             return (
-              <li key={item.id} className='cart-item'>
-                <div>
+              <li
+                key={item.id}
+                className='flex justify-between items-center my-2'
+              >
+                <div className='text-dark-brown'>
                   <span>{item.name}</span>
                   <span> ({item.totalPrice.toFixed(2)})</span>
                 </div>
-                <div className='cart-item-actions'>
-                  <button onClick={() => removeItemHandler(item)}>-</button>
-                  <span>{item.quantity}</span>
-                  <button onClick={() => addItemHandler(item)}>+</button>
+                <div className='flex items-center gap-2'>
+                  <button
+                    onClick={() => removeItemHandler(item)}
+                    className='w-6 h-6 rounded-full bg-dark-card text-white border-none cursor-pointer flex items-center justify-center text-base hover:bg-dark-brown hover:text-gold'
+                  >
+                    -
+                  </button>
+                  <span className='text-dark-brown font-bold'>
+                    {item.quantity}
+                  </span>
+                  <button
+                    onClick={() => addItemHandler(item)}
+                    className='w-6 h-6 rounded-full bg-dark-card text-white border-none cursor-pointer flex items-center justify-center text-base hover:bg-dark-brown hover:text-gold'
+                  >
+                    +
+                  </button>
                 </div>
               </li>
             );
           })}
         </ul>
       )}
-      <p className='cart-total'>
+      <p className='flex justify-end items-center gap-4 text-cart-total text-lg font-bold my-4'>
         Cart Total: <strong>{formattedTotalPrice}</strong>
       </p>
-      <div className='modal-actions'>
-        <button onClick={onClose} className='button'>
+      <div className='flex justify-end gap-4'>
+        <button
+          onClick={onClose}
+          className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded hover:bg-gold-dark hover:border-gold-dark'
+        >
           Close
         </button>
 
         {cartItems.length > 0 && (
-          <button className='button' onClick={onCheckout}>
+          <button
+            className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded hover:bg-gold-dark hover:border-gold-dark'
+            onClick={onCheckout}
+          >
             Go to Checkout
           </button>
         )}

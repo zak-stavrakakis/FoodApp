@@ -42,33 +42,24 @@ export default function Header() {
   return (
     <>
       <CartModal ref={modal} title='Your Cart' />
-      <header id='main-header'>
-        <div className='left-header'>
-          <div id='title'>
-            <img src={logoPng} alt='logo' />
+      <header className='flex justify-between items-center py-12 px-[10%]'>
+        <div className='flex justify-start items-center'>
+          <div className='flex gap-4 items-center'>
+            <img
+              src={logoPng}
+              alt='logo'
+              className='w-16 h-16 object-contain rounded-full border-2 border-gold'
+            />
             <p>REACTFOOD</p>
           </div>
-          <nav style={{ marginLeft: '5rem' }}>
-            <Link
-              to='/'
-              style={{
-                marginRight: '10px',
-                fontSize: '20px',
-                color: 'white',
-                textDecoration: 'none',
-              }}
-            >
+          <nav className='ml-20'>
+            <Link to='/' className='mr-2.5 text-xl text-white no-underline'>
               Shop
             </Link>
             {user.role === 'user' && (
               <Link
                 to='/orders'
-                style={{
-                  marginRight: '10px',
-                  fontSize: '20px',
-                  color: 'white',
-                  textDecoration: 'none',
-                }}
+                className='mr-2.5 text-xl text-white no-underline'
               >
                 Orders
               </Link>
@@ -80,14 +71,16 @@ export default function Header() {
           {user.role === 'user' && (
             <button
               onClick={handleOpenCartClick}
-              className='button'
-              style={{ marginRight: '2rem' }}
+              className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded text-2xl font-lato mr-8 hover:bg-gold-dark hover:border-gold-dark'
             >
               Cart <span>({cartQuantity})</span>
             </button>
           )}
 
-          <button onClick={handleLogout} className='button'>
+          <button
+            onClick={handleLogout}
+            className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded text-2xl font-lato hover:bg-gold-dark hover:border-gold-dark'
+          >
             Logout
           </button>
         </div>

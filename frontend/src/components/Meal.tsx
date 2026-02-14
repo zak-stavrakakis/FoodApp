@@ -56,20 +56,32 @@ export default function Meal({
         price={price}
       />
       <article>
-        <img src={AppConfig.toServerImage(`${image}`)} alt={name} />
-        <div className='product-content'>
+        <img
+          src={AppConfig.toServerImage(`${image}`)}
+          alt={name}
+          className='w-full h-80 object-cover'
+        />
+        <div className='flex flex-col items-center gap-4 p-4'>
           <div>
-            <h3>{name}</h3>
-            <p className='meal-item-price'>${price}</p>
-            <p className='meal-item-description'>{description}</p>
+            <h3 className='text-2xl font-bold my-3 font-lato'>{name}</h3>
+            <p className='inline-block bg-dark-card text-gold text-sm font-bold py-1 px-8 m-0 rounded'>
+              ${price}
+            </p>
+            <p className='m-4'>{description}</p>
           </div>
-          <p className='meal-item-actions'>
+          <p className='flex justify-center gap-4'>
             {user.role === 'user' ? (
-              <button onClick={addToCartHandler} className='button'>
+              <button
+                onClick={addToCartHandler}
+                className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded hover:bg-gold-dark hover:border-gold-dark'
+              >
                 Add to Cart
               </button>
             ) : (
-              <button className='button' onClick={handleOpenModalClick}>
+              <button
+                className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded hover:bg-gold-dark hover:border-gold-dark'
+                onClick={handleOpenModalClick}
+              >
                 Update Meal
               </button>
             )}
