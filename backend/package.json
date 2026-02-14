@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "migrate": "node db/runner.js migrate",
+    "seed": "node db/runner.js seed",
+    "db:setup": "node db/runner.js setup",
+    "db:reset": "node db/runner.js reset"
   },
   "keywords": [],
   "author": "",

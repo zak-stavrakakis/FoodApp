@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.js';
 import cartRoutes from './routes/cart.js';
 import ordersRoutes from './routes/orders.js';
 import mealsRoutes from './routes/meals.js';
+import { setupDatabase } from './db/runner.js';
 
 const app = express();
 
@@ -33,4 +34,11 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+setupDatabase()
+  .then(() => {
+    app.listen(3000, () => console.log('Server running on port 3000'));
+  })
+  .catch((err) => {
+    console.error('[db] Database setup failed:', err);
+    process.exit(1);
+  });
