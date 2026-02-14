@@ -2,7 +2,10 @@ import express  from 'express';
 import { authMiddleware, isAdmin } from '../controllers/auth.middleware.js';
 import { pool } from '../data/test-db.js';
 
-import type { MealRow, UpdateMealBody } from '../types/index.js';
+import { validate } from '../controllers/validate.middleware.js';
+import { updateMealBodySchema, mealIdParamSchema } from '../schemas.js';
+import type { UpdateMealBody, MealIdParam } from '../schemas.js';
+import type { MealRow } from '../types/index.js';
 import type { Request, Response } from 'express';
 
 const router = express.Router();
@@ -29,8 +32,10 @@ router.patch(
   '/:id',
   authMiddleware,
   isAdmin,
+  validate(mealIdParamSchema, 'params'),
+  validate(updateMealBodySchema),
   async (
-    req: Request<{ id: string }, object, UpdateMealBody>,
+    req: Request<MealIdParam, object, UpdateMealBody>,
     res: Response,
   ) => {
     if (!req.user) {

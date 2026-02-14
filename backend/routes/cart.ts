@@ -1,12 +1,10 @@
 import express from 'express';
 import { pool } from '../data/test-db.js';
 import { authMiddleware } from '../controllers/auth.middleware.js';
-import type {
-  AddToCartBody,
-  RemoveFromCartBody,
-  CartRow,
-  CartItemRow,
-} from '../types/index.js';
+import { validate } from '../controllers/validate.middleware.js';
+import { addToCartBodySchema, removeFromCartBodySchema } from '../schemas.js';
+import type { AddToCartBody, RemoveFromCartBody } from '../schemas.js';
+import type { CartRow, CartItemRow } from '../types/index.js';
 
 import type { Request, Response } from 'express';
 
@@ -64,6 +62,7 @@ router.get('', authMiddleware, async (req: Request, res: Response) => {
 router.post(
   '/add',
   authMiddleware,
+  validate(addToCartBodySchema),
   async (req: Request<object, object, AddToCartBody>, res: Response) => {
     if (!req.user) {
       res.status(401).json({ message: 'Unauthorized' });
@@ -143,6 +142,7 @@ router.post(
 router.post(
   '/remove',
   authMiddleware,
+  validate(removeFromCartBodySchema),
   async (req: Request<object, object, RemoveFromCartBody>, res: Response) => {
     if (!req.user) {
       res.status(401).json({ message: 'Unauthorized' });

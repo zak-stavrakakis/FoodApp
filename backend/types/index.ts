@@ -79,53 +79,6 @@ export interface OrderItemRow {
 }
 
 // ============================================
-// Request Body Types
-// ============================================
-
-export interface RegisterBody {
-  email: string;
-  password: string;
-}
-
-export interface LoginBody {
-  email: string;
-  password: string;
-}
-
-export interface AddToCartBody {
-  mealId: string;
-  name: string;
-  price: number;
-}
-
-export interface RemoveFromCartBody {
-  mealId: string;
-}
-
-export interface CreateOrderBody {
-  order: {
-    items: Array<{
-      id: string;
-      name: string;
-      price: number;
-      quantity: number;
-    }>;
-    customer: {
-      name: string;
-      city: string;
-      street: string;
-      postalCode: string;
-    };
-  };
-}
-
-export interface UpdateMealBody {
-  name: string;
-  price: number | string;
-  description: string;
-}
-
-// ============================================
 // Response / Query Types
 // ============================================
 
