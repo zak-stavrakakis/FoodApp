@@ -8,13 +8,13 @@ import { seedUsers } from './seeds/users.seed.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-async function runSqlFile(filePath) {
+async function runSqlFile(filePath: string): Promise<void> {
   const sql = fs.readFileSync(filePath, 'utf-8');
   await pool.query(sql);
   console.log(`  Executed: ${path.basename(filePath)}`);
 }
 
-function getSqlFiles(dir) {
+function getSqlFiles(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
@@ -23,8 +23,8 @@ function getSqlFiles(dir) {
     .map((f) => path.join(dir, f));
 }
 
-export async function checkTablesExist() {
-  const result = await pool.query(`
+export async function checkTablesExist(): Promise<boolean> {
+  const result = await pool.query<{ exists: boolean }>(`
     SELECT EXISTS (
       SELECT FROM information_schema.tables
       WHERE table_schema = 'public'
@@ -34,7 +34,7 @@ export async function checkTablesExist() {
   return result.rows[0].exists;
 }
 
-export async function runMigrations() {
+export async function runMigrations(): Promise<void> {
   console.log('[db] Running migrations...');
   const migrationsDir = path.join(__dirname, 'migrations');
   const files = getSqlFiles(migrationsDir);
@@ -50,7 +50,7 @@ export async function runMigrations() {
   console.log('[db] Migrations complete.');
 }
 
-export async function runSeeds() {
+export async function runSeeds(): Promise<void> {
   console.log('[db] Running seeds...');
 
   // SEED MEALS
@@ -64,7 +64,7 @@ export async function runSeeds() {
   console.log('[db] Seeds complete.');
 }
 
-export async function resetDatabase() {
+export async function resetDatabase(): Promise<void> {
   console.log('[db] Resetting database...');
   await pool.query(`
     DROP TABLE IF EXISTS order_items, cart_items, orders, carts, meals, users CASCADE
@@ -76,7 +76,7 @@ export async function resetDatabase() {
   console.log('[db] Database reset complete.');
 }
 
-export async function setupDatabase() {
+export async function setupDatabase(): Promise<void> {
   const tablesExist = await checkTablesExist();
 
   if (tablesExist) {
@@ -94,28 +94,28 @@ const command = process.argv[2];
 if (command === 'migrate') {
   runMigrations()
     .then(() => process.exit(0))
-    .catch((err) => {
+    .catch((err: unknown) => {
       console.error('[db] Migration failed:', err);
       process.exit(1);
     });
 } else if (command === 'seed') {
   runSeeds()
     .then(() => process.exit(0))
-    .catch((err) => {
+    .catch((err: unknown) => {
       console.error('[db] Seed failed:', err);
       process.exit(1);
     });
 } else if (command === 'reset') {
   resetDatabase()
     .then(() => process.exit(0))
-    .catch((err) => {
+    .catch((err: unknown) => {
       console.error('[db] Reset failed:', err);
       process.exit(1);
     });
 } else if (command === 'setup') {
   setupDatabase()
     .then(() => process.exit(0))
-    .catch((err) => {
+    .catch((err: unknown) => {
       console.error('[db] Setup failed:', err);
       process.exit(1);
     });

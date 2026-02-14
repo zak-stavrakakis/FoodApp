@@ -9,6 +9,8 @@ import ordersRoutes from './routes/orders.js';
 import mealsRoutes from './routes/meals.js';
 import { setupDatabase } from './db/runner.js';
 
+import type { Request, Response } from 'express';
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -31,7 +33,7 @@ app.use('/meals', mealsRoutes);
 
 app.options('*', cors());
 
-app.use((req, res) => {
+app.use((_req: Request, res: Response) => {
   res.status(404).json({ message: 'Not found' });
 });
 
@@ -39,7 +41,7 @@ setupDatabase()
   .then(() => {
     app.listen(3000, () => console.log('Server running on port 3000'));
   })
-  .catch((err) => {
+  .catch((err: unknown) => {
     console.error('[db] Database setup failed:', err);
     process.exit(1);
   });

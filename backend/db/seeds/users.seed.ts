@@ -1,8 +1,14 @@
 import bcrypt from 'bcrypt';
 import { pool } from '../../data/test-db.js';
 
-export async function seedUsers() {
-  const users = [
+interface SeedUser {
+  email: string;
+  password: string;
+  role: 'user' | 'admin';
+}
+
+export async function seedUsers(): Promise<void> {
+  const users: SeedUser[] = [
     { email: 'test@user.com', password: 'password123', role: 'user' },
     { email: 'test@admin.com', password: 'password123', role: 'admin' },
   ];
