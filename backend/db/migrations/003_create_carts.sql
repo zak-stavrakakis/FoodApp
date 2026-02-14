@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS carts (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  total_quantity INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT now()
+);

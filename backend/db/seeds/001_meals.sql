@@ -1,0 +1,22 @@
+INSERT INTO meals (id, name, price, description, image) VALUES
+  ('m1',  'Beef Tacos',                10.99, 'Three soft-shell tacos filled with seasoned beef, salsa, and fresh cilantro.', 'images/beef-tacos.jpg'),
+  ('m2',  'Caesar Salad',               9.99, 'Crisp romaine lettuce with Caesar dressing, croutons, and shaved Parmesan.', 'images/caesar-salad.jpg'),
+  ('m3',  'Chicken Curry',             13.75, 'Tender chicken in a rich coconut curry sauce served with basmati rice.', 'images/chicken-curry.jpg'),
+  ('m4',  'Chocolate Brownie',          6.50, 'Rich, fudgy brownie topped with vanilla ice cream and chocolate drizzle.', 'images/chocolate-brownie.jpg'),
+  ('m5',  'Eggplant Parmesan',         13.00, 'Breaded eggplant baked with marinara sauce and melted mozzarella.', 'images/eggplant-parmesan.jpg'),
+  ('m6',  'Falafel Wrap',               9.50, 'Crispy falafel with hummus, pickled vegetables, and tahini in a warm pita.', 'images/falafel-wrap.jpg'),
+  ('m7',  'Grilled Chicken Sandwich',  11.50, 'Juicy grilled chicken breast with lettuce, tomato, and mayo on a toasted bun.', 'images/grilled-chicken-sandwich.jpg'),
+  ('m8',  'Lemon Cheesecake',           7.99, 'Creamy cheesecake with a tangy lemon curd topping and graham crust.', 'images/lemon-cheesecake.jpg'),
+  ('m9',  'Lobster Bisque',            16.50, 'Velvety cream soup with chunks of fresh lobster and a hint of brandy.', 'images/lobster-bisque.jpg'),
+  ('m10', 'Mac and Cheese',            10.00, 'Creamy baked macaroni with a blend of cheddar and Gruyere cheeses.', 'images/mac-and-cheese.jpg'),
+  ('m11', 'Margherita Pizza',          12.99, 'Classic pizza with fresh mozzarella, tomatoes, and basil on a crispy crust.', 'images/margherita-pizza.jpg'),
+  ('m12', 'Miso Ramen',               14.00, 'Rich miso broth with noodles, soft-boiled egg, chashu pork, and nori.', 'images/miso-ramen.jpg'),
+  ('m13', 'Mushroom Risotto',          15.00, 'Creamy Arborio rice with wild mushrooms and a touch of truffle oil.', 'images/mushroom-risotto.jpg'),
+  ('m14', 'Pancake Stack',              8.99, 'Fluffy buttermilk pancakes with maple syrup, butter, and fresh berries.', 'images/pancake-stack.jpg'),
+  ('m15', 'Seafood Paella',            24.50, 'Traditional Spanish rice dish with shrimp, mussels, and saffron.', 'images/seafood-paella.jpg'),
+  ('m16', 'Spaghetti Carbonara',       14.50, 'Creamy pasta with pancetta, egg yolk, and Parmesan cheese.', 'images/spaghetti-carbonara.jpg'),
+  ('m17', 'Steak Frites',             22.00, 'Pan-seared ribeye steak with crispy French fries and herb butter.', 'images/steak-frites.jpg'),
+  ('m18', 'Sushi Roll Platter',        18.99, 'An assortment of fresh salmon, tuna, and avocado maki rolls.', 'images/sushi-roll-platter.jpg'),
+  ('m19', 'Vegan Buddha Bowl',         12.00, 'Quinoa, roasted sweet potato, chickpeas, avocado, and tahini dressing.', 'images/vegan-buddha-bowl.jpg'),
+  ('m20', 'Veggie Burger',             10.50, 'A hearty plant-based patty with avocado, lettuce, and chipotle aioli.', 'images/veggie-burger.jpg')
+ON CONFLICT (id) DO NOTHING;

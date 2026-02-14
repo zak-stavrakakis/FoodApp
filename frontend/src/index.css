@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Lato:wght@400;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-gold: #ffc404;
+  --color-gold-dark: #ffab04;
+  --color-gold-deep: #644403;
+  --color-dark: #1d1a16;
+  --color-dark-brown: #1f1a09;
+  --color-dark-card: #312c1d;
+  --color-modal-beige: #e4ddd4;
+  --color-body-text: #d9e2f1;
+  --color-cart-total: #46443c;
+  --color-input-border: #ccc;
+  --color-input-focus: #4f46e5;
+  --color-order-green: #16a34a;
+  --color-order-gray: #6b7280;
+  --color-order-border: #e5e7eb;
+  --color-order-customer-bg: #f9fafb;
+
+  --font-raleway: 'Raleway', sans-serif;
+  --font-lato: 'Lato', sans-serif;
+
+  --animate-fade-slide-up: fade-slide-up 0.3s ease-out forwards;
+}
+
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer base {
+  body {
+    font-family: var(--font-raleway);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  dialog[open] {
+    margin: auto;
+  }
+
+  dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.55);
+  }
+}
+
+@utility font-inherit {
+  font: inherit;
+}
