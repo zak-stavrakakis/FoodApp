@@ -1,13 +1,19 @@
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { cartActions } from '../redux-store/cart-slice';
 import useToken from '../hooks/useToken';
 import { AppConfig } from '../config';
+import type { RootState } from '../redux-store';
+import type { CartItem } from '../types';
 
-export default function Cart({ onClose, onCheckout }) {
+interface CartProps {
+  onClose: () => void;
+  onCheckout: () => void;
+}
+
+export default function Cart({ onClose, onCheckout }: CartProps) {
   const token = useToken();
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -15,9 +21,9 @@ export default function Cart({ onClose, onCheckout }) {
   );
   const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
 
-  const removeItemHandler = async (item) => {
+  const removeItemHandler = async (item: CartItem) => {
     const res = await fetch(AppConfig.toApiUrl('cart/remove'), {
-      method: 'POST', 
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -33,27 +39,35 @@ export default function Cart({ onClose, onCheckout }) {
     dispatch(cartActions.removeItemFromCart(item.id));
   };
 
-  const addItemHandler = async (item) => {
-    dispatch(
-      cartActions.addItemToCart({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-      }),
-    );
-
-    await fetch(AppConfig.toApiUrl('cart/add'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        mealId: item.id,
-        name: item.name,
-        price: item.price,
-      }),
-    });
+  const addItemHandler = async (item: CartItem) => {
+    try {
+      const res = await fetch(AppConfig.toApiUrl('cart/add'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          mealId: item.id,
+          name: item.name,
+          price: item.price,
+        }),
+      });
+      if (!res.ok) {
+        alert('Item was not added to the cart');
+        return;
+      }
+      dispatch(
+        cartActions.addItemToCart({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+        }),
+      );
+    } catch (err) {
+      console.error(err);
+      alert('Failed to add item to cart.');
+    }
   };
 
   return (
@@ -62,13 +76,11 @@ export default function Cart({ onClose, onCheckout }) {
       {cartItems.length > 0 && (
         <ul>
           {cartItems.map((item) => {
-            
-
             return (
               <li key={item.id} className='cart-item'>
                 <div>
                   <span>{item.name}</span>
-                  <span> ({parseFloat(item.totalPrice).toFixed(2)})</span>
+                  <span> ({item.totalPrice.toFixed(2)})</span>
                 </div>
                 <div className='cart-item-actions'>
                   <button onClick={() => removeItemHandler(item)}>-</button>

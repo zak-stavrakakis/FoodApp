@@ -1,4 +1,10 @@
-export default function Order({ order }) {
+import type { Order as OrderType } from '../types';
+
+interface OrderProps {
+  order: OrderType;
+}
+
+export default function Order({ order }: OrderProps) {
   return (
     <div className='order-card'>
       <div className='order-header'>

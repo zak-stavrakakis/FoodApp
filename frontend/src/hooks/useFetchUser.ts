@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { userActions } from '../redux-store/user-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppConfig } from '../config';
+import type { RootState } from '../redux-store';
+import type { User } from '../types';
 
-export default function useFetchUser() {
+export default function useFetchUser(): Partial<User> {
   const dispatch = useDispatch();
-  const { user, token } = useSelector((state) => state.user);
+  const { user, token } = useSelector((state: RootState) => state.user);
 
   const fetchUser = useCallback(async () => {
     if (!token) return;

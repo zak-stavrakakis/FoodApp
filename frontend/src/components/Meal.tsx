@@ -1,37 +1,50 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { cartActions } from '../redux-store/cart-slice';
-import { useSelector } from 'react-redux';
 import { useRef } from 'react';
 import MealModal from './MealModal';
 import { AppConfig } from '../config';
+import type { RootState } from '../redux-store';
+import type { Meal as MealType, ModalHandle } from '../types';
 
-export default function Meal({ id, image, name, price, description }) {
+export default function Meal({
+  id,
+  image,
+  name,
+  price,
+  description,
+}: MealType) {
   const dispatch = useDispatch();
-  const { user, token } = useSelector((state) => state.user);
+  const { user, token } = useSelector((state: RootState) => state.user);
 
-  const modal = useRef();
+  const modal = useRef<ModalHandle>(null);
 
   function handleOpenModalClick() {
-    modal.current.open();
+    modal.current?.open();
   }
 
   const addToCartHandler = async () => {
-    const res = await fetch(AppConfig.toApiUrl('cart/add'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        mealId: id,
-        name,
-        price,
-      }),
-    });
-    if (!res.ok) {
-      alert('Item was not added to the cart');
+    try {
+      const res = await fetch(AppConfig.toApiUrl('cart/add'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          mealId: id,
+          name,
+          price,
+        }),
+      });
+      if (!res.ok) {
+        alert('Item was not added to the cart');
+        return;
+      }
+      dispatch(cartActions.addItemToCart({ id, name, price }));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to add item to cart.');
     }
-    dispatch(cartActions.addItemToCart({ id, name, price }));
   };
   return (
     <>

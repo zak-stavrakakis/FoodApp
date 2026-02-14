@@ -5,14 +5,14 @@ import { useDispatch } from 'react-redux';
 import { userActions } from '../redux-store/user-slice';
 import { AppConfig } from '../config';
 
-export default function Login({}) {
+export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const token = useToken();
   const dispatch = useDispatch();
 
-  const submit = async (e) => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const res = await fetch(AppConfig.toApiUrl('auth/login'), {

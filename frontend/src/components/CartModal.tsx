@@ -2,21 +2,29 @@ import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Cart from './Cart';
 import UserForm from './UserForm';
+import type { ModalHandle } from '../types';
 
-const CartModal = forwardRef(function Modal({ title, cartQuantity }, ref) {
-  const dialog = useRef();
+interface CartModalProps {
+  title: string;
+}
+
+const CartModal = forwardRef<ModalHandle, CartModalProps>(function Modal(
+  { title },
+  ref,
+) {
+  const dialog = useRef<HTMLDialogElement>(null);
   const [showForm, setShowForm] = useState(false);
 
   useImperativeHandle(ref, () => {
     return {
       open: () => {
-        dialog.current.showModal();
+        dialog.current?.showModal();
       },
     };
   });
 
   function onClose() {
-    dialog.current.close();
+    dialog.current?.close();
     setShowForm(false);
   }
 
@@ -33,7 +41,7 @@ const CartModal = forwardRef(function Modal({ title, cartQuantity }, ref) {
         <Cart onClose={onClose} onCheckout={onCheckout} />
       )}
     </dialog>,
-    document.getElementById('modal'),
+    document.getElementById('modal')!,
   );
 });
 

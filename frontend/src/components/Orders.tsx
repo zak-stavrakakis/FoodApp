@@ -1,10 +1,11 @@
-import Order from './Order.jsx';
+import Order from './Order';
 import { useState, useEffect } from 'react';
-import { fetchAllOrders } from '../http.js';
-import useToken from '../hooks/useToken.js';
+import { fetchAllOrders } from '../http';
+import useToken from '../hooks/useToken';
+import type { Order as OrderType } from '../types';
 
-export default function Orders({}) {
-  const [orders, setOrders] = useState([]);
+export default function Orders() {
+  const [orders, setOrders] = useState<OrderType[]>([]);
   const token = useToken();
   useEffect(() => {
     async function fetchOrders() {
@@ -14,7 +15,9 @@ export default function Orders({}) {
       try {
         const data = await fetchAllOrders(token);
         setOrders(data);
-      } catch (err) {}
+      } catch (err) {
+        console.error('Failed to fetch orders:', err);
+      }
     }
     fetchOrders();
   }, [token]);

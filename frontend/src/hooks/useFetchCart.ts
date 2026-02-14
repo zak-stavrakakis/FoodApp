@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import useToken from './useToken';
 import { cartActions } from '../redux-store/cart-slice';
 import { AppConfig } from '../config';
+import type { RootState } from '../redux-store';
+import type { CartState } from '../types';
 
-export default function useFetchCart() {
+export default function useFetchCart(): CartState {
   const dispatch = useDispatch();
   const token = useToken();
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector((state: RootState) => state.cart);
 
   const fetchCart = useCallback(async () => {
     if (!token) return;
