@@ -39,12 +39,17 @@ export default function Login() {
   }
 
   return (
-    <div className='login-page'>
-      <form className='login-form' onSubmit={submit}>
-        <h2 className='login-title'>Login</h2>
+    <div className='flex items-center justify-center min-h-screen bg-gradient-to-b from-[#29251c] to-[#2c2306]'>
+      <form
+        className='bg-dark rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.5)] p-10 flex flex-col gap-5 w-full max-w-md'
+        onSubmit={submit}
+      >
+        <h2 className='text-center text-3xl font-bold font-lato text-gold mb-2'>
+          Login
+        </h2>
 
         <input
-          className='login-input'
+          className='font-inherit p-3 rounded-lg border border-input-border bg-[#2a2518] text-body-text text-base placeholder:text-gray-400 focus:outline-none focus:border-input-focus'
           type='email'
           placeholder='Email'
           value={email}
@@ -52,14 +57,16 @@ export default function Login() {
         />
 
         <input
-          className='login-input'
+          className='font-inherit p-3 rounded-lg border border-input-border bg-[#2a2518] text-body-text text-base placeholder:text-gray-400 focus:outline-none focus:border-input-focus'
           type='password'
           placeholder='Password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className='login-button'>Login</button>
+        <button className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-3 px-6 rounded-lg text-xl font-lato font-bold hover:bg-gold-dark hover:border-gold-dark transition-colors'>
+          Login
+        </button>
       </form>
     </div>
   );

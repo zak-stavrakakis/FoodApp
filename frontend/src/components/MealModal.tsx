@@ -91,29 +91,57 @@ const MealModal = forwardRef<ModalHandle, MealModalProps>(function Modal(
   };
 
   return createPortal(
-    <dialog className='modal' ref={dialog}>
-      <h2>{name}</h2>
-      <form onSubmit={handleSubmit} className='control'>
-        <div className='control'>
-          <label>Name</label>
-          <input name='name' defaultValue={name} required />
+    <dialog
+      className='bg-modal-beige rounded-md border-none shadow-[0_2px_8px_rgba(0,0,0,0.6)] p-4 w-4/5 max-w-[40rem] animate-fade-slide-up'
+      ref={dialog}
+    >
+      <h2 className='text-dark-brown font-lato font-bold text-2xl mb-4'>
+        {name}
+      </h2>
+      <form onSubmit={handleSubmit} className='my-2 flex flex-col'>
+        <div className='my-2 flex flex-col'>
+          <label className='font-bold mb-2 text-dark-brown'>Name</label>
+          <input
+            name='name'
+            defaultValue={name}
+            required
+            className='w-full max-w-80 font-inherit p-2 rounded border border-input-border'
+          />
         </div>
 
-        <div className='control'>
-          <label>Price</label>
-          <input type='number' defaultValue={price} name='price' required />
+        <div className='my-2 flex flex-col'>
+          <label className='font-bold mb-2 text-dark-brown'>Price</label>
+          <input
+            type='number'
+            defaultValue={price}
+            name='price'
+            required
+            className='w-full max-w-80 font-inherit p-2 rounded border border-input-border'
+          />
         </div>
 
-        <div className='control'>
-          <label>Description</label>
-          <input name='description' defaultValue={description} required />
+        <div className='my-2 flex flex-col'>
+          <label className='font-bold mb-2 text-dark-brown'>Description</label>
+          <input
+            name='description'
+            defaultValue={description}
+            required
+            className='w-full max-w-80 font-inherit p-2 rounded border border-input-border'
+          />
         </div>
-        <div className='modal-actions'>
-          <button type='button' className='button' onClick={onClose}>
+        <div className='flex justify-end gap-4 mt-4'>
+          <button
+            type='button'
+            className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded hover:bg-gold-dark hover:border-gold-dark'
+            onClick={onClose}
+          >
             Close
           </button>
 
-          <button className='button' type='submit'>
+          <button
+            className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded hover:bg-gold-dark hover:border-gold-dark'
+            type='submit'
+          >
             Submit
           </button>
         </div>

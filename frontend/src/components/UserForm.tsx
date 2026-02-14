@@ -45,40 +45,73 @@ export default function UserForm({ onClose, onGoBack }: UserFormProps) {
     }
   }
   return (
-    <form onSubmit={handleSubmit} className='control'>
-      <div className='control'>
-        <label>Name</label>
-        <input name='name' required />
+    <form onSubmit={handleSubmit} className='my-2 flex flex-col'>
+      <div className='my-2 flex flex-col'>
+        <label className='font-bold mb-2 text-dark-brown'>Name</label>
+        <input
+          name='name'
+          required
+          className='w-full max-w-80 font-inherit p-2 rounded border border-input-border'
+        />
       </div>
 
-      <div className='control'>
-        <label>Email</label>
-        <input type='email' name='email' defaultValue={user?.email} required />
+      <div className='my-2 flex flex-col'>
+        <label className='font-bold mb-2 text-dark-brown'>Email</label>
+        <input
+          type='email'
+          name='email'
+          defaultValue={user?.email}
+          required
+          className='w-full max-w-80 font-inherit p-2 rounded border border-input-border'
+        />
       </div>
 
-      <div className='control'>
-        <label>Street</label>
-        <input name='street' required />
+      <div className='my-2 flex flex-col'>
+        <label className='font-bold mb-2 text-dark-brown'>Street</label>
+        <input
+          name='street'
+          required
+          className='w-full max-w-80 font-inherit p-2 rounded border border-input-border'
+        />
       </div>
 
-      <div className='control'>
-        <label>Postal Code</label>
-        <input name='postalCode' required />
+      <div className='my-2 flex flex-col'>
+        <label className='font-bold mb-2 text-dark-brown'>Postal Code</label>
+        <input
+          name='postalCode'
+          required
+          className='w-full max-w-80 font-inherit p-2 rounded border border-input-border'
+        />
       </div>
 
-      <div className='control'>
-        <label>City</label>
-        <input name='city' required />
+      <div className='my-2 flex flex-col'>
+        <label className='font-bold mb-2 text-dark-brown'>City</label>
+        <input
+          name='city'
+          required
+          className='w-full max-w-80 font-inherit p-2 rounded border border-input-border'
+        />
       </div>
 
-      <div className='modal-actions'>
-        <button className='button' type='button' onClick={() => onGoBack()}>
+      <div className='flex justify-end gap-4 mt-4'>
+        <button
+          className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded hover:bg-gold-dark hover:border-gold-dark'
+          type='button'
+          onClick={() => onGoBack()}
+        >
           Back to Cart
         </button>
-        <button className='button' type='button' onClick={() => onClose()}>
+        <button
+          className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded hover:bg-gold-dark hover:border-gold-dark'
+          type='button'
+          onClick={() => onClose()}
+        >
           Close
         </button>
-        <button className='button' type='submit'>
+        <button
+          className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded hover:bg-gold-dark hover:border-gold-dark'
+          type='submit'
+        >
           Submit
         </button>
       </div>
