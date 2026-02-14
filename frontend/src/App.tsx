@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login.jsx';
-import Shop from './components/Shop.jsx';
-import Orders from './components/Orders.jsx';
-import ProtectedRoute from './components/ProtectedRoute.jsx';
-import useToken from './hooks/useToken.js';
-import useFetchUser from './hooks/useFetchUser.js';
-import useFetchCart from './hooks/useFetchCart.js';
-import Header from './components/Header.jsx';
+import Login from './components/Login';
+import Shop from './components/Shop';
+import Orders from './components/Orders';
+import ProtectedRoute from './components/ProtectedRoute';
+import useToken from './hooks/useToken';
+import useFetchUser from './hooks/useFetchUser';
+import useFetchCart from './hooks/useFetchCart';
+import Header from './components/Header';
 
 function App() {
   const user = useFetchUser();

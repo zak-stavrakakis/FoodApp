@@ -1,6 +1,7 @@
 import { AppConfig } from './config';
+import type { Meal, Order, CartItem } from './types';
 
-export async function fetchAllMeals() {
+export async function fetchAllMeals(): Promise<Meal[]> {
   const response = await fetch(AppConfig.toApiUrl('meals'));
   const resData = await response.json();
 
@@ -11,9 +12,9 @@ export async function fetchAllMeals() {
   return resData;
 }
 
-export async function fetchAllOrders(token) {
+export async function fetchAllOrders(token: string): Promise<Order[]> {
   const response = await fetch(AppConfig.toApiUrl('orders'), {
-    method: 'GET', 
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -27,7 +28,12 @@ export async function fetchAllOrders(token) {
   return resData;
 }
 
-export async function postOrders(order) {
+interface PostOrderPayload {
+  customer: Record<string, FormDataEntryValue>;
+  items: CartItem[];
+}
+
+export async function postOrders(order: PostOrderPayload): Promise<string> {
   const token = localStorage.getItem('token');
   const response = await fetch(AppConfig.toApiUrl('orders'), {
     method: 'POST',

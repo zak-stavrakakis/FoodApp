@@ -1,23 +1,28 @@
-import { postOrders } from '../http.js';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { cartActions } from '../redux-store/cart-slice.js';
+import { postOrders } from '../http';
+import { useSelector, useDispatch } from 'react-redux';
+import { cartActions } from '../redux-store/cart-slice';
+import type { RootState } from '../redux-store';
 
-export default function UserForm({ onClose, onGoBack }) {
-  const cartItems = useSelector((state) => state.cart.items);
-  const user = useSelector((state) => state.user.user);
+interface UserFormProps {
+  onClose: () => void;
+  onGoBack: () => void;
+}
+
+export default function UserForm({ onClose, onGoBack }: UserFormProps) {
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const user = useSelector((state: RootState) => state.user.user);
 
   const dispatch = useDispatch();
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
 
-    const name = formData.get('name').trim();
-    const email = formData.get('email').trim();
-    const street = formData.get('street').trim();
-    const postalCode = formData.get('postalCode').trim();
-    const city = formData.get('city').trim();
+    const name = (formData.get('name') as string).trim();
+    const email = (formData.get('email') as string).trim();
+    const street = (formData.get('street') as string).trim();
+    const postalCode = (formData.get('postalCode') as string).trim();
+    const city = (formData.get('city') as string).trim();
 
     if (!name || !email || !street || !postalCode || !city) {
       alert('Please fill in all fields.');
@@ -34,7 +39,10 @@ export default function UserForm({ onClose, onGoBack }) {
       await postOrders(order);
       dispatch(cartActions.replaceCart({ totalQuantity: 0, items: [] }));
       onClose();
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+      alert('Failed to submit order. Please try again.');
+    }
   }
   return (
     <form onSubmit={handleSubmit} className='control'>

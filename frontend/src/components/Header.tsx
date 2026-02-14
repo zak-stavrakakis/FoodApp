@@ -1,24 +1,26 @@
 import logoPng from '../assets/logo.jpg';
 import { useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import CartModal from './CartModal.jsx';
-import { userActions } from '../redux-store/user-slice.js';
-import { AppConfig } from '../config.js';
+import CartModal from './CartModal';
+import { userActions } from '../redux-store/user-slice';
+import { AppConfig } from '../config';
+import type { RootState } from '../redux-store';
+import type { ModalHandle } from '../types';
 
-export default function Header({}) {
- 
-  const user = useSelector((state) => state.user.user);
+export default function Header() {
+  const user = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch();
-  const modal = useRef();
+  const modal = useRef<ModalHandle>(null);
 
-  const cartQuantity = useSelector((state) => state.cart.totalQuantity);
+  const cartQuantity = useSelector(
+    (state: RootState) => state.cart.totalQuantity,
+  );
   const navigate = useNavigate();
 
   function handleOpenCartClick() {
-    modal.current.open();
+    modal.current?.open();
   }
 
   const handleLogout = async () => {
@@ -39,7 +41,7 @@ export default function Header({}) {
   };
   return (
     <>
-      <CartModal ref={modal} title='Your Cart' cartQuantity={cartQuantity} />
+      <CartModal ref={modal} title='Your Cart' />
       <header id='main-header'>
         <div className='left-header'>
           <div id='title'>
@@ -47,7 +49,6 @@ export default function Header({}) {
             <p>REACTFOOD</p>
           </div>
           <nav style={{ marginLeft: '5rem' }}>
-            {}
             <Link
               to='/'
               style={{

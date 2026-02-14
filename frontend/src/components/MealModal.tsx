@@ -1,49 +1,57 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { mealsActions } from '../redux-store/meals-slice';
 import { useDispatch } from 'react-redux';
 import useToken from '../hooks/useToken';
 import { AppConfig } from '../config';
+import type { ModalHandle } from '../types';
 
-const MealModal = forwardRef(function Modal(
+interface MealModalProps {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+}
+
+const MealModal = forwardRef<ModalHandle, MealModalProps>(function Modal(
   { id, name, price, description },
   ref,
 ) {
   const token = useToken();
   const dispatch = useDispatch();
-  const dialog = useRef();
+  const dialog = useRef<HTMLDialogElement>(null);
 
   useImperativeHandle(ref, () => {
     return {
       open: () => {
-        dialog.current.showModal();
+        dialog.current?.showModal();
       },
     };
   });
 
   function onClose() {
-    dialog.current.close();
+    dialog.current?.close();
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
-    const name = formData.get('name').trim();
-    const price = formData.get('price');
-    const description = formData.get('description').trim();
+    const formData = new FormData(event.currentTarget);
+    const formName = (formData.get('name') as string).trim();
+    const formPrice = formData.get('price') as string;
+    const formDescription = (formData.get('description') as string).trim();
 
-    if (!name) {
+    if (!formName) {
       alert('Name is required');
       return;
     }
 
-    if (!description) {
+    if (!formDescription) {
       alert('Description is required');
       return;
     }
 
-    if (!price || Number(price) <= 0) {
+    if (!formPrice || Number(formPrice) <= 0) {
       alert('Price must be greater than 0');
       return;
     }
@@ -55,8 +63,8 @@ const MealModal = forwardRef(function Modal(
     };
 
     try {
-      const { id, ...rest } = meal;
-      const res = await fetch(AppConfig.toApiUrl(`/meals/${meal.id}`), {
+      const { id: mealId, ...rest } = meal;
+      const res = await fetch(AppConfig.toApiUrl(`/meals/${mealId}`), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -65,13 +73,20 @@ const MealModal = forwardRef(function Modal(
         body: JSON.stringify(rest),
       });
       if (!res.ok) {
-        alert(`Failed to update meal ${rest.name}`);
+        alert(`Failed to update meal ${formName}`);
         return;
       }
-      dispatch(mealsActions.updateMeal(meal));
+      dispatch(
+        mealsActions.updateMeal({
+          id,
+          name: formName,
+          price: Number(formPrice),
+          description: formDescription,
+        }),
+      );
       onClose();
     } catch (error) {
-      log(error);
+      console.error(error);
     }
   };
 
@@ -104,7 +119,7 @@ const MealModal = forwardRef(function Modal(
         </div>
       </form>
     </dialog>,
-    document.getElementById('meal-modal'),
+    document.getElementById('meal-modal')!,
   );
 });
 
