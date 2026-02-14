@@ -3,7 +3,6 @@ import { pool } from '../data/test-db.js';
 import { authMiddleware } from '../controllers/auth.middleware.js';
 
 const router = express.Router();
-const JWT_SECRET = 'dev_secret'; 
 
 router.get('', authMiddleware, async (req, res) => {
   const userId = req.user.userId;
