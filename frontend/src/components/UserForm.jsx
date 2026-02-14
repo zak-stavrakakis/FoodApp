@@ -1,7 +1,7 @@
 import { postOrders } from '../http.js';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { cartActions } from '../redux-store/cart-slice';
+import { cartActions } from '../redux-store/cart-slice.js';
 
 export default function UserForm({ onClose, onGoBack }) {
   const cartItems = useSelector((state) => state.cart.items);
