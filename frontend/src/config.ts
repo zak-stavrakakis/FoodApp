@@ -1,5 +1,6 @@
-const baseURL =
-  import.meta.env.MODE !== 'production' ? 'http://localhost:3000' : '/api';
+const isProd = import.meta.env.MODE === 'production';
+const baseURL = isProd ? '/api' : 'http://localhost:3000';
+const imageBaseURL = isProd ? '' : 'http://localhost:3000';
 
 interface AppConfigType {
   baseURL: string;
@@ -15,5 +16,5 @@ export const AppConfig: AppConfigType = {
     return `${baseURL}${url && typeof url === 'string' && url.startsWith('/') ? url : `/${url || ''}`}`;
   },
   toServerImage: (src?: string) =>
-    `${baseURL}${src && typeof src === 'string' && src.startsWith('/') ? src : `/${src || ''}`}`,
+    `${imageBaseURL}${src && typeof src === 'string' && src.startsWith('/') ? src : `/${src || ''}`}`,
 };

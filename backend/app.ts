@@ -12,13 +12,15 @@ import { setupDatabase } from './db/runner.js';
 import type { Request, Response } from 'express';
 
 const app = express();
+const PORT = Number(process.env.PORT) || 3000;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: CORS_ORIGIN,
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -39,7 +41,7 @@ app.use((_req: Request, res: Response) => {
 
 setupDatabase()
   .then(() => {
-    app.listen(3000, () => console.log('Server running on port 3000'));
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch((err: unknown) => {
     console.error('[db] Database setup failed:', err);
