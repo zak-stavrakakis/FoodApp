@@ -121,7 +121,7 @@ Create `backend/.env`:
 
 ```env
 JWT_SECRET=dev_secret
-DB_PASSWORD=your_postgres_password
+DB_PASSWORD=
 ```
 
 ### 3. Install dependencies
