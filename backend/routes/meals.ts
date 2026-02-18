@@ -1,8 +1,8 @@
 import express from 'express';
-import { authMiddleware, isAdmin } from '../controllers/auth.middleware.js';
+import { authMiddleware, isAdmin } from '../middlewares/auth.middleware.js';
 import { pool } from '../data/test-db.js';
 
-import { validate } from '../controllers/validate.middleware.js';
+import { validate } from '../middlewares/validate.middleware.js';
 import { updateMealBodySchema, mealIdParamSchema } from '../schemas.js';
 import type { UpdateMealBody, MealIdParam } from '../schemas.js';
 import type { MealRow } from '../types/index.js';

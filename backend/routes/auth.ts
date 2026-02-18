@@ -2,8 +2,8 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { pool } from '../data/test-db.js';
-import { authMiddleware } from '../controllers/auth.middleware.js';
-import { validate } from '../controllers/validate.middleware.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { validate } from '../middlewares/validate.middleware.js';
 import { registerBodySchema, loginBodySchema } from '../schemas.js';
 import type { RegisterBody, LoginBody } from '../schemas.js';
 import type { UserRow } from '../types/index.js';
@@ -74,27 +74,23 @@ router.post('/logout', (_req: Request, res: Response) => {
   res.json({ message: 'Logged out successfully' });
 });
 
-router.get(
-  '/user',
-  authMiddleware,
-  async (req: Request, res: Response) => {
-    if (!req.user) {
-      res.status(401).json({ error: 'Unauthorized' });
-      return;
-    }
+router.get('/user', authMiddleware, async (req: Request, res: Response) => {
+  if (!req.user) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
 
-    const result = await pool.query<Pick<UserRow, 'id' | 'email' | 'role'>>(
-      'SELECT id, email, role FROM users WHERE id = $1',
-      [req.user.userId],
-    );
+  const result = await pool.query<Pick<UserRow, 'id' | 'email' | 'role'>>(
+    'SELECT id, email, role FROM users WHERE id = $1',
+    [req.user.userId],
+  );
 
-    if (result.rows.length === 0) {
-      res.status(404).json({ error: 'User not found' });
-      return;
-    }
+  if (result.rows.length === 0) {
+    res.status(404).json({ error: 'User not found' });
+    return;
+  }
 
-    res.json(result.rows[0]);
-  },
-);
+  res.json(result.rows[0]);
+});
 
 export default router;

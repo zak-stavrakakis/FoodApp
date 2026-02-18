@@ -1,7 +1,7 @@
 import express from 'express';
 import { pool } from '../data/test-db.js';
-import { authMiddleware } from '../controllers/auth.middleware.js';
-import { validate } from '../controllers/validate.middleware.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { validate } from '../middlewares/validate.middleware.js';
 import { addToCartBodySchema, removeFromCartBodySchema } from '../schemas.js';
 import type { AddToCartBody, RemoveFromCartBody } from '../schemas.js';
 import type { CartRow, CartItemRow } from '../types/index.js';
@@ -90,9 +90,7 @@ router.post(
         cartId = cartResult.rows[0].id;
       }
 
-      const itemResult = await pool.query<
-        Pick<CartItemRow, 'id' | 'quantity'>
-      >(
+      const itemResult = await pool.query<Pick<CartItemRow, 'id' | 'quantity'>>(
         'SELECT id, quantity FROM cart_items WHERE cart_id = $1 AND meal_id = $2',
         [cartId, mealId],
       );

@@ -1,7 +1,7 @@
 import express from 'express';
 import { pool } from '../data/test-db.js';
-import { authMiddleware } from '../controllers/auth.middleware.js';
-import { validate } from '../controllers/validate.middleware.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { validate } from '../middlewares/validate.middleware.js';
 import { createOrderBodySchema } from '../schemas.js';
 import type { CreateOrderBody } from '../schemas.js';
 import type { CartRow, OrderWithItems } from '../types/index.js';
@@ -81,10 +81,7 @@ router.post(
     try {
       const cartResult = await pool.query<
         Pick<CartRow, 'id' | 'total_quantity'>
-      >(
-        'SELECT id, total_quantity FROM carts WHERE user_id = $1',
-        [userId],
-      );
+      >('SELECT id, total_quantity FROM carts WHERE user_id = $1', [userId]);
 
       if (cartResult.rows.length === 0) {
         throw new Error('Cart not found');
