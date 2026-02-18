@@ -1,16 +1,18 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { MealsState, Meal } from '../types';
+import type { MealsState, MealCount, Meal } from '../types';
 
 const initialState: MealsState = {
   items: [],
+  count: 0
 };
 
 const mealsSlice = createSlice({
   name: 'meals',
   initialState,
   reducers: {
-    setMeals(state, action: PayloadAction<Meal[]>) {
-      state.items = action.payload;
+    setMeals(state, action: PayloadAction<MealCount>) {
+      state.items = action.payload.meals;
+      state.count = action.payload.count
     },
     updateMeal(state, action: PayloadAction<Partial<Meal> & { id: string }>) {
       const newItem = action.payload;

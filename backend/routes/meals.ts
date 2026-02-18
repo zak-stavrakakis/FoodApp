@@ -1,4 +1,4 @@
-import express  from 'express';
+import express from 'express';
 import { authMiddleware, isAdmin } from '../controllers/auth.middleware.js';
 import { pool } from '../data/test-db.js';
 
@@ -10,18 +10,25 @@ import type { Request, Response } from 'express';
 
 const router = express.Router();
 
-router.get('/', async (_req: Request, res: Response) => {
+router.post('/', async (_req: Request, res: Response) => {
+  const { limit, offset } = _req.body;
   try {
+    const count = await pool.query('SELECT COUNT(*) FROM meals');
+
+    const countNumber = parseInt(count.rows[0].count);
+
     const result = await pool.query<MealRow>(
-      'SELECT * FROM meals order by name asc',
+      'SELECT * FROM meals ORDER BY name ASC LIMIT $1 OFFSET $2',
+      [limit, offset],
     );
 
-    res.json(
-      result.rows.map((row) => ({
+    res.json({
+      meals: result.rows.map((row) => ({
         ...row,
         price: parseFloat(row.price),
       })),
-    );
+      count: countNumber,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to fetch meals' });
@@ -34,10 +41,7 @@ router.patch(
   isAdmin,
   validate(mealIdParamSchema, 'params'),
   validate(updateMealBodySchema),
-  async (
-    req: Request<MealIdParam, object, UpdateMealBody>,
-    res: Response,
-  ) => {
+  async (req: Request<MealIdParam, object, UpdateMealBody>, res: Response) => {
     if (!req.user) {
       res.status(401).json({ message: 'Unauthorized' });
       return;

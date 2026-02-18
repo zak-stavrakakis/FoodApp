@@ -1,8 +1,20 @@
 import { AppConfig } from './config';
-import type { Meal, Order, CartItem } from './types';
+import type { Meal, MealCount, Order, CartItem } from './types';
 
-export async function fetchAllMeals(): Promise<Meal[]> {
-  const response = await fetch(AppConfig.toApiUrl('meals'));
+export async function fetchAllMeals(
+  page: number,
+  pageSize: number,
+): Promise<MealCount> {
+  const response = await fetch(AppConfig.toApiUrl('meals'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+    }),
+  });
   const resData = await response.json();
 
   if (!response.ok) {

@@ -16,6 +16,11 @@ export interface Meal {
   image: string;
 }
 
+export interface MealCount {
+  meals: Meal[];
+  count: number;
+}
+
 export interface CartItem {
   id: string;
   name: string;
@@ -64,6 +69,7 @@ export interface CartState {
 
 export interface MealsState {
   items: Meal[];
+  count: number;
 }
 
 // ============================================

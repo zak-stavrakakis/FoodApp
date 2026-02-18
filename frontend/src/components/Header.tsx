@@ -53,13 +53,16 @@ export default function Header() {
             <p>REACTFOOD</p>
           </div>
           <nav className='ml-20'>
-            <Link to='/' className='mr-2.5 text-xl text-white no-underline'>
+            <Link
+              to='/'
+              className='relative mr-4 text-lg font-semibold text-white transition duration-300 hover:text-amber-400 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-amber-400 after:transition-all after:duration-300 hover:after:w-full'
+            >
               Shop
             </Link>
             {user.role === 'user' && (
               <Link
                 to='/orders'
-                className='mr-2.5 text-xl text-white no-underline'
+                className='relative mr-4 text-lg font-semibold text-white transition duration-300 hover:text-amber-400 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-amber-400 after:transition-all after:duration-300 hover:after:w-full'
               >
                 Orders
               </Link>
