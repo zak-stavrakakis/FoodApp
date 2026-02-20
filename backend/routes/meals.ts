@@ -10,17 +10,43 @@ import type { Request, Response } from 'express';
 
 const router = express.Router();
 
-router.post('/', async (_req: Request, res: Response) => {
-  const { limit, offset } = _req.body;
+router.post('/', async (req: Request, res: Response) => {
+  const { limit, offset, minPrice, maxPrice } = req.body;
+
   try {
-    const count = await pool.query('SELECT COUNT(*) FROM meals');
+    let whereClause = 'WHERE 1=1';
+    const values: any[] = [];
+    let index = 1;
 
-    const countNumber = parseInt(count.rows[0].count);
+    if (minPrice !== undefined && minPrice !== '') {
+      whereClause += ` AND price >= $${index++}`;
+      values.push(minPrice);
+    }
 
-    const result = await pool.query<MealRow>(
-      'SELECT * FROM meals ORDER BY name ASC LIMIT $1 OFFSET $2',
-      [limit, offset],
-    );
+    if (maxPrice !== undefined && maxPrice !== '') {
+      whereClause += ` AND price <= $${index++}`;
+      values.push(maxPrice);
+    }
+
+    // 🔹 COUNT with filters
+    const countQuery = `SELECT COUNT(*) FROM meals ${whereClause}`;
+    const countResult = await pool.query(countQuery, values);
+    const countNumber = parseInt(countResult.rows[0].count);
+
+    // 🔹 Pagination query
+    const dataQuery = `
+      SELECT * FROM meals
+      ${whereClause}
+      ORDER BY name ASC
+      LIMIT $${index++}
+      OFFSET $${index}
+    `;
+
+    const result = await pool.query<MealRow>(dataQuery, [
+      ...values,
+      limit,
+      offset,
+    ]);
 
     res.json({
       meals: result.rows.map((row) => ({

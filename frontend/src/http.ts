@@ -4,6 +4,8 @@ import type { Meal, MealCount, Order, CartItem } from './types';
 export async function fetchAllMeals(
   page: number,
   pageSize: number,
+  minPrice?: number,
+  maxPrice?: number,
 ): Promise<MealCount> {
   const response = await fetch(AppConfig.toApiUrl('meals'), {
     method: 'POST',
@@ -13,6 +15,8 @@ export async function fetchAllMeals(
     body: JSON.stringify({
       limit: pageSize,
       offset: (page - 1) * pageSize,
+      minPrice,
+      maxPrice,
     }),
   });
   const resData = await response.json();
