@@ -7,6 +7,7 @@ import useToken from '../hooks/useToken';
 import { useState } from 'react';
 import { mealsActions } from '../redux-store/meals-slice';
 import type { RootState } from '../redux-store';
+import Filters from './Filters';
 
 export default function Shop() {
   const mealsItems = useSelector((state: RootState) => state.meals.items);
@@ -14,25 +15,10 @@ export default function Shop() {
   const token = useToken();
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const page = 1;
   const pageSize = 6;
   const totalPages = Math.ceil(count / pageSize);
 
   const dispatch = useDispatch();
-
-  // const fetchMeals = useCallback(async () => {
-  //   if (!token) {
-  //     dispatch(mealsActions.setMeals({ meals: [], count: 0 }));
-  //     return;
-  //   }
-  //   try {
-  //     const data = await fetchAllMeals(page, pageSize);
-  //     dispatch(mealsActions.setMeals(data));
-  //   } catch (err) {
-  //     console.error('Failed to fetch meals:', err);
-  //   }
-  // }, [token, dispatch]);
 
   const fetchMeals = useCallback(
     async (pageNumber: number) => {
@@ -50,7 +36,6 @@ export default function Shop() {
         );
 
         dispatch(mealsActions.setMeals(data));
-        setCurrentPage(pageNumber);
       } catch (err) {
         console.error('Failed to fetch meals:', err);
       }
@@ -62,14 +47,13 @@ export default function Shop() {
     fetchMeals(1);
   }, [fetchMeals]);
 
-  // const setPage = async (index: number) => {
-  //   try {
-  //     const data = await fetchAllMeals(index, pageSize);
-  //     dispatch(mealsActions.setMeals(data));
-  //   } catch (err) {
-  //     console.error('Failed to fetch meals:', err);
-  //   }
-  // };
+  const handleMinPriceChange = (newValue: string) => {
+    setMinPrice(newValue);
+  };
+
+  const handleMaxPriceChange = (newValue: string) => {
+    setMaxPrice(newValue);
+  };
 
   return (
     <>
@@ -87,23 +71,12 @@ export default function Shop() {
               </button>
             ))}
           </div>
-          <div className='mt-8 flex gap-4 items-center'>
-            <input
-              type='number'
-              placeholder='Min price'
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-              className='p-2 rounded border'
-            />
-
-            <input
-              type='number'
-              placeholder='Max price'
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              className='p-2 rounded border'
-            />
-          </div>
+          <Filters
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            onChangeMinPrice={handleMinPriceChange}
+            onChangeMaxPrice={handleMaxPriceChange}
+          />
         </div>
       </div>
       <Meals>
