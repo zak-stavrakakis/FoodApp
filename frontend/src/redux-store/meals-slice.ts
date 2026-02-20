@@ -3,7 +3,10 @@ import type { MealsState, MealCount, Meal } from '../types';
 
 const initialState: MealsState = {
   items: [],
-  count: 0
+  count: 0,
+  page: 1,
+  min: '',
+  max: '',
 };
 
 const mealsSlice = createSlice({
@@ -12,7 +15,16 @@ const mealsSlice = createSlice({
   reducers: {
     setMeals(state, action: PayloadAction<MealCount>) {
       state.items = action.payload.meals;
-      state.count = action.payload.count
+      state.count = action.payload.count;
+    },
+    setPage(state, action: PayloadAction<number>) {
+      state.page = action.payload;
+    },
+    setMin(state, action: PayloadAction<string>) {
+      state.min = action.payload;
+    },
+    setMax(state, action: PayloadAction<string>) {
+      state.max = action.payload;
     },
     updateMeal(state, action: PayloadAction<Partial<Meal> & { id: string }>) {
       const newItem = action.payload;

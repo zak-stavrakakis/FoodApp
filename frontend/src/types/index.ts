@@ -70,6 +70,9 @@ export interface CartState {
 export interface MealsState {
   items: Meal[];
   count: number;
+  page: number;
+  min: string;
+  max: string;
 }
 
 // ============================================

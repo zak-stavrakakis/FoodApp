@@ -12,9 +12,12 @@ import Filters from './Filters';
 export default function Shop() {
   const mealsItems = useSelector((state: RootState) => state.meals.items);
   const count = useSelector((state: RootState) => state.meals.count);
+  const page = useSelector((state: RootState) => state.meals.page);
+  const minPrice = useSelector((state: RootState) => state.meals.min);
+  const maxPrice = useSelector((state: RootState) => state.meals.max);
   const token = useToken();
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  // const [minPrice, setMinPrice] = useState('');
+  // const [maxPrice, setMaxPrice] = useState('');
   const pageSize = 6;
   const totalPages = Math.ceil(count / pageSize);
 
@@ -40,19 +43,23 @@ export default function Shop() {
         console.error('Failed to fetch meals:', err);
       }
     },
-    [token, dispatch, minPrice, maxPrice],
+    [token, dispatch, minPrice, maxPrice, page],
   );
 
   useEffect(() => {
-    fetchMeals(1);
+    fetchMeals(page);
   }, [fetchMeals]);
 
   const handleMinPriceChange = (newValue: string) => {
-    setMinPrice(newValue);
+    dispatch(mealsActions.setMin(newValue));
   };
 
   const handleMaxPriceChange = (newValue: string) => {
-    setMaxPrice(newValue);
+    dispatch(mealsActions.setMax(newValue));
+  };
+
+  const handleClick = (index: number) => {
+    dispatch(mealsActions.setPage(index));
   };
 
   return (
@@ -64,8 +71,13 @@ export default function Shop() {
             {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index}
-                onClick={() => fetchMeals(index + 1)}
-                className='font-inherit cursor-pointer bg-gold border border-gold text-dark-brown py-2 px-6 rounded text-2xl font-lato mr-8 hover:bg-gold-dark hover:border-gold-dark'
+                onClick={() => handleClick(index + 1)}
+                className={`font-inherit cursor-pointer border py-2 px-6 rounded text-2xl font-lato mr-8
+                   ${
+                     index === page - 1
+                       ? 'bg-gold-dark border-gold-dark text-white'
+                       : 'bg-gold border-gold text-dark-brown hover:bg-gold-dark hover:border-gold-dark'
+                   }`}
               >
                 {index + 1}
               </button>
