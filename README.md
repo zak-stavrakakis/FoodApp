@@ -7,7 +7,7 @@ A full-stack food ordering application with user authentication, meal browsing, 
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React 19, Redux Toolkit 2, React Router 7, Tailwind CSS 4, Vite 7 |
-| Backend | Express 4, PostgreSQL (pg), Zod 4, JWT, bcrypt |
+| Backend | Express 4, PostgreSQL (pg), JWT, bcrypt |
 | Language | TypeScript 5 (both frontend and backend) |
 | Database | PostgreSQL 16 |
 | DevOps | Docker, Docker Compose, Nginx |
@@ -18,10 +18,10 @@ A full-stack food ordering application with user authentication, meal browsing, 
 FoodApp/
 ├── backend/
 │   ├── app.ts                         # Express server entry point
-│   ├── schemas.ts                     # Zod validation schemas
-│   ├── controllers/
+│   ├── schemas.ts                     
+│   ├── middlewares/
 │   │   ├── auth.middleware.ts          # JWT auth + admin middleware
-│   │   └── validate.middleware.ts      # Zod validation middleware
+│   │   └── validate.middleware.ts     
 │   ├── data/
 │   │   └── test-db.ts                 # PostgreSQL connection pool
 │   ├── db/
